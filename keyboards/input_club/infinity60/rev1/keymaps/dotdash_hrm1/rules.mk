@@ -17,3 +17,6 @@ DEFERRED_EXEC_ENABLE = yes
 
 # https://github.com/qmk/qmk_firmware/issues/19593#issuecomment-1387476045
 # NO_USB_STARTUP_CHECK = yes
+
+# caps word
+CAPS_WORD_ENABLE = yes
