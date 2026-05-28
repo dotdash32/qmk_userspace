@@ -19,6 +19,25 @@ bool caps_word_press_user(uint16_t keycode) {
     }
 }
 
+bool is_flow_tap_key(uint16_t keycode) {
+    if ((get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) != 0) {
+        return false; // Disable Flow Tap on hotkeys.
+    }
+    switch (get_tap_keycode(keycode)) {
+        case KC_A ... KC_Z:
+        case KC_DOT:
+        case KC_COMM:
+        case KC_SCLN:
+        case KC_SLSH:
+            return true;
+        // explicitly disable space (spaceFN)
+        case KC_SPC:
+        case LT(3,KC_SPC):
+            return false;
+    }
+    return false;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed && (keycode == LT(3,KC_SPC) || keycode == KC_SPC)) {
         uint8_t shift_mods = get_mods() & MOD_MASK_SHIFT;
