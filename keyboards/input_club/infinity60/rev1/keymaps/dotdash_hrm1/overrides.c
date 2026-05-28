@@ -1,18 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "key_combos.c"
 
-const key_override_t space_underscore_override = ko_make_with_layers_negmods_and_options(
-    MOD_MASK_SHIFT,
-    LT(3,KC_SPC),
-    KC_UNDS,
-    ~0,
-    MOD_MASK_CAG,
-    ko_options_default
-);
-
-const key_override_t *key_overrides[] = {
-    &space_underscore_override,
-};
 
 bool caps_word_press_user(uint16_t keycode) {
     switch (keycode) {
@@ -32,11 +20,24 @@ bool caps_word_press_user(uint16_t keycode) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (is_caps_word_on() && record->event.pressed) {
-        if ((get_mods() & MOD_MASK_SHIFT) && (keycode == LT(3,KC_SPC) || keycode == KC_SPC)) {
+    if (record->event.pressed && (keycode == LT(3,KC_SPC) || keycode == KC_SPC)) {
+        uint8_t shift_mods = get_mods() & MOD_MASK_SHIFT;
+        if (shift_mods == MOD_MASK_SHIFT) {
+            // Both shifts held → underscore
             uint8_t held_mods = get_mods();
             del_mods(MOD_MASK_SHIFT);
             tap_code16(KC_UNDS);
+            set_mods(held_mods);
+            return false;
+        } else if (shift_mods) {
+            // Single shift held → hyphen (or underscore during caps_word)
+            uint8_t held_mods = get_mods();
+            del_mods(MOD_MASK_SHIFT);
+            if (is_caps_word_on()) {
+                tap_code16(KC_UNDS);
+            } else {
+                tap_code(KC_MINS);
+            }
             set_mods(held_mods);
             return false;
         }
