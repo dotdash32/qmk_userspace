@@ -40,6 +40,10 @@ bool is_flow_tap_key(uint16_t keycode) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed && (keycode == LT(3,KC_SPC) || keycode == KC_SPC)) {
+        // Don't intercept if ctrl/alt/gui are also held
+        if (get_mods() & (MOD_MASK_CG | MOD_MASK_ALT)) {
+            return true;
+        }
         uint8_t shift_mods = get_mods() & MOD_MASK_SHIFT;
         if (shift_mods == MOD_MASK_SHIFT) {
             // Both shifts held → underscore
@@ -61,5 +65,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
     }
+    // Mod-tap/layer-tap can't send shifted keycodes on tap, so handle parens manually
+    switch (keycode) {
+        case RCTL_T(KC_LPRN):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_LPRN);
+                return false;
+            }
+            break;
+        case LT(2,KC_RPRN):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_RPRN);
+                return false;
+            }
+            break;
+    }
+
     return true;
 }
