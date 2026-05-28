@@ -23,4 +23,5 @@ CAPS_WORD_ENABLE = yes
 
 # key overrides (shift+space = underscore, etc.)
 KEY_OVERRIDE_ENABLE = yes
+COMBO_ENABLE = yes
 INTROSPECTION_KEYMAP_C = keyboards/input_club/infinity60/rev1/keymaps/dotdash_hrm1/overrides.c

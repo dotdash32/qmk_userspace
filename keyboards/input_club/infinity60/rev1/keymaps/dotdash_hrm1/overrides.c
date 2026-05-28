@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "key_combos.c"
 
 const key_override_t space_underscore_override = ko_make_with_layers_negmods_and_options(
     MOD_MASK_SHIFT,
