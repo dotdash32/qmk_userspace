@@ -1,5 +1,4 @@
 #include QMK_KEYBOARD_H
-#include "key_combos.c"
 
 
 bool caps_word_press_user(uint16_t keycode) {

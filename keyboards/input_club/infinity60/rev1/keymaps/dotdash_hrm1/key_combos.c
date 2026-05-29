@@ -1,3 +1,5 @@
+#include QMK_KEYBOARD_H
+
 enum combos {
     UI_LPRN,
     IO_RPRN,
