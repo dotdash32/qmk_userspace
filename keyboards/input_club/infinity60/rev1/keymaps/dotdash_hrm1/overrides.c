@@ -29,38 +29,27 @@ bool is_flow_tap_key(uint16_t keycode) {
         case KC_SCLN:
         case KC_SLSH:
             return true;
-        // explicitly disable space (spaceFN)
-        case KC_SPC:
-        case LT(3,KC_SPC):
-            return false;
     }
     return false;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed && (keycode == LT(3,KC_SPC) || keycode == KC_SPC)) {
-        // Don't intercept if ctrl/alt/gui are also held
+    if (record->event.pressed && record->tap.count && (keycode == LT(3,KC_SPC) || keycode == KC_SPC)) {
+        uint8_t shift_mods = get_mods() & MOD_MASK_SHIFT;
         if (get_mods() & (MOD_MASK_CG | MOD_MASK_ALT)) {
             return true;
         }
-        uint8_t shift_mods = get_mods() & MOD_MASK_SHIFT;
         if (shift_mods == MOD_MASK_SHIFT) {
-            // Both shifts held → underscore
-            uint8_t held_mods = get_mods();
+            // Both shifts held → hyphen
             del_mods(MOD_MASK_SHIFT);
-            tap_code16(KC_UNDS);
-            set_mods(held_mods);
+            tap_code(KC_MINS);
+            set_mods(get_mods() | shift_mods);
             return false;
         } else if (shift_mods) {
-            // Single shift held → hyphen (or underscore during caps_word)
-            uint8_t held_mods = get_mods();
+            // Single shift held → underscore
             del_mods(MOD_MASK_SHIFT);
-            if (is_caps_word_on()) {
-                tap_code16(KC_UNDS);
-            } else {
-                tap_code(KC_MINS);
-            }
-            set_mods(held_mods);
+            tap_code16(KC_UNDS);
+            set_mods(get_mods() | shift_mods);
             return false;
         }
     }
