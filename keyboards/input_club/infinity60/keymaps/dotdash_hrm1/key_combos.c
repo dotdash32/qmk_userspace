@@ -18,4 +18,11 @@ combo_t key_combos[] = {
     [IO_RPRN] = COMBO(io_combo, KC_RPRN),
     [OP_MINS] = COMBO(op_combo, KC_MINS),
     [DK_TG2_] = COMBO(dk_combo, TG(2)),
+
+#ifdef COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
+#include "modules/getreuer/custom_shift_keys/custom_shift_keys.h"
+const custom_shift_key_t custom_shift_keys[] = {
+    {LT(3,KC_SPC), KC_UNDS},  // Shift Space is _
+    {KC_SPC, KC_UNDS},         // Shift Space is _
 };
+#endif

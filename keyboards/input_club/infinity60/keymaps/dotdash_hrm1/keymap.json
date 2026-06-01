@@ -397,5 +397,6 @@
       "KC_SLEP"
     ]
   ],
-  "author": "Josh D (dotdash)"
+  "author": "Josh D (dotdash)",
+  "modules": ["getreuer/custom_shift_keys"]
 }

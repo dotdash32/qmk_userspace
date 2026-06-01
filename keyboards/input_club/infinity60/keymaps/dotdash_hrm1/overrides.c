@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
 
-
 bool caps_word_press_user(uint16_t keycode) {
     switch (keycode) {
         case KC_A ... KC_Z:
@@ -34,25 +33,6 @@ bool is_flow_tap_key(uint16_t keycode) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed && record->tap.count && (keycode == LT(3,KC_SPC) || keycode == KC_SPC)) {
-        uint8_t shift_mods = get_mods() & MOD_MASK_SHIFT;
-        if (get_mods() & (MOD_MASK_CG | MOD_MASK_ALT)) {
-            return true;
-        }
-        if (shift_mods == MOD_MASK_SHIFT) {
-            // Both shifts held → hyphen
-            del_mods(MOD_MASK_SHIFT);
-            tap_code(KC_MINS);
-            set_mods(get_mods() | shift_mods);
-            return false;
-        } else if (shift_mods) {
-            // Single shift held → underscore
-            del_mods(MOD_MASK_SHIFT);
-            tap_code16(KC_UNDS);
-            set_mods(get_mods() | shift_mods);
-            return false;
-        }
-    }
     // Mod-tap/layer-tap can't send shifted keycodes on tap, so handle parens manually
     switch (keycode) {
         case RCTL_T(KC_LPRN):
