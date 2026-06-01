@@ -31,23 +31,3 @@ bool is_flow_tap_key(uint16_t keycode) {
     }
     return false;
 }
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // Mod-tap/layer-tap can't send shifted keycodes on tap, so handle parens manually
-    switch (keycode) {
-        case RCTL_T(KC_LPRN):
-            if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_LPRN);
-                return false;
-            }
-            break;
-        case LT(2,KC_RPRN):
-            if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_RPRN);
-                return false;
-            }
-            break;
-    }
-
-    return true;
-}
