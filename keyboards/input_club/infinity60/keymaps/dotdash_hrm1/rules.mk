@@ -23,5 +23,5 @@ CAPS_WORD_ENABLE = yes
 
 # key overrides & combos
 COMBO_ENABLE = yes
-INTROSPECTION_KEYMAP_C = keyboards/input_club/infinity60/rev1/keymaps/dotdash_hrm1/key_combos.c
-SRC += keyboards/input_club/infinity60/rev1/keymaps/dotdash_hrm1/overrides.c
+INTROSPECTION_KEYMAP_C = keyboards/input_club/infinity60/keymaps/dotdash_hrm1/key_combos.c
+SRC += keyboards/input_club/infinity60/keymaps/dotdash_hrm1/overrides.c
