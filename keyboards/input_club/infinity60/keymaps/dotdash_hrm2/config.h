@@ -23,6 +23,9 @@
 #define BILATERAL_COMBINATIONS_TYPING_STREAK_TIMEOUT 160  /* ms */
 #define BILATERAL_COMBINATIONS_TYPING_STREAK_MODMASK (~MOD_MASK_SHIFT)
 
+/* Custom shift keys: disable when any mod besides shift is held */
+#define CUSTOM_SHIFT_KEYS_NEGMODS (MOD_MASK_CG | MOD_MASK_ALT)
+
 /* Caps word */
 #define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
