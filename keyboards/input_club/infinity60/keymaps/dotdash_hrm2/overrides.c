@@ -31,3 +31,30 @@ bool is_flow_tap_key(uint16_t keycode) {
     }
     return false;
 }
+
+uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_keycode) {
+    if (prev_keycode == KC_BSPC) {
+        return 0;
+    }
+
+    bool is_shift_mt = false;
+    uint16_t term;
+    switch (keycode) {
+        case LSFT_T(KC_F):
+            is_shift_mt = true;
+            term = 100;
+            break;
+        case RSFT_T(KC_J):
+            is_shift_mt = true;
+            term = 125;
+            break;
+        default:
+            term = FLOW_TAP_TERM;
+            break;
+    }
+
+    if (is_shift_mt && prev_keycode == LT(3, KC_SPC)) {
+        return 0;
+    }
+    return term;
+}

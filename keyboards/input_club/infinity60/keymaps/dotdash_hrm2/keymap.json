@@ -3,7 +3,7 @@
   "notes": "",
   "version": 1,
   "keyboard": "input_club/infinity60/rev1",
-  "keymap": "input_club_infinity60_rev1_layout_60_ansi_split_bs_rshift_2026-06-04_hrm2-1",
+  "keymap": "input_club_infinity60_rev1_layout_60_ansi_split_bs_rshift_2026-06-05_hrm2-1",
   "layout": "LAYOUT_60_ansi_split_bs_rshift",
   "layers": [
     [ // base layer
@@ -189,7 +189,7 @@
       "LGUI_T(KC_0)",
       "LALT_T(KC_COMM)",
       "LCTL_T(KC_DOT)",
-      "RSFT_T(KC_SLSH)",
+      "RSFT_T(KC_ENT)",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
@@ -251,8 +251,8 @@
       "LGUI_T(KC_V)",
       "KC_TRNS",
       "KC_LBRC",
-      "LGUI_T(KC_RBRC)",
-      "LALT_T(KC_SPC)",
+      "LGUI_T(KC_SPC)",
+      "LALT_T(KC_RBRC)",
       "LCTL_T(KC_DOT)",
       "RSFT_T(KC_ENT)",
       "KC_TRNS",

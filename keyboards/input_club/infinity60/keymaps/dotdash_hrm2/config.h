@@ -7,7 +7,7 @@
 // https://sunaku.github.io/home-row-mods.html
 
 /* QMK */
-#define TAPPING_TERM 200
+#define TAPPING_TERM 175
 #define PERMISSIVE_HOLD
 #define FLOW_TAP_TERM 150 // aka require-prior-idle-ms
 #define CHORDAL_HOLD // does this conflict with BILATERAL_COMBINATIONS?
