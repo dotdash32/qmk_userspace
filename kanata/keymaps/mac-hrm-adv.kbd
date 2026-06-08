@@ -1,0 +1,101 @@
+#|
+Advanced home-row-mods config for Mac laptop keyboard.
+Uses tap-hold-release-keys with automatic mod disabling on rapid typing.
+
+Key features:
+- When a home row mod activates tap, mods are disabled while typing rapidly
+- tap-hold-release-keys makes hold actions more responsive
+- Pressing another key on the same half activates early tap action
+- Caps as lmeta
+- (pl;') as arrows layer
+|#
+
+(defcfg
+  process-unmapped-keys yes
+  tap-hold-require-prior-idle 150
+)
+
+(defvar
+  tap-time 200
+  hold-time 150
+
+  left-hand-keys (
+    q w e r t
+    a s d f g
+    z x c v b
+  )
+  right-hand-keys (
+    y u i o p
+    h j k l ;
+    n m , . /
+  )
+)
+
+(defsrc
+                     i  o  p  {
+  caps  a s d f g h j k l  ;   '
+  lsft                        rsft
+                        ralt
+)
+
+#| disabled until newer version :/
+(defhands
+  (left  q w e r t a s d f g z x c v b)
+  (right y u i o p h j k l ; n m , . /)
+)
+|#
+
+(deffakekeys
+  to-base (layer-switch base)
+)
+
+(defalias
+  ;; Auto-disable mods on rapid typing
+  tap (multi
+    (layer-switch nomods)
+    (on-idle-fakekey to-base tap 20)
+  )
+
+  ;; Caps lock as left meta
+  cap lmeta
+
+  ;; Navigation layer on right alt
+  nav (layer-while-held arrows)
+
+
+  ;; Left hand home row mods: a s d f -> lsft lctl lalt lmeta
+  Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) lsft $left-hand-keys)
+  Hs (tap-hold-release-keys $tap-time $hold-time (multi s @tap) lctl $left-hand-keys)
+  Hd (tap-hold-release-keys $tap-time $hold-time (multi d @tap) lalt $left-hand-keys)
+  Hf (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lmeta $left-hand-keys)
+
+  ;; Right hand home row mods: j k l ; -> rmeta ralt rctl rsft
+  Hj  (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rmeta $right-hand-keys)
+  Hk  (tap-hold-release-keys $tap-time $hold-time (multi k @tap) ralt $right-hand-keys)
+  Hl  (tap-hold-release-keys $tap-time $hold-time (multi l @tap) rctl $right-hand-keys)
+  Hsc (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) rsft $right-hand-keys)
+
+  ;; Test binding for 'o' key
+  testO (tap-hold $tap-time $hold-time o lmeta)
+)
+
+(deflayer base
+        _  @testO  _  _
+  @cap  @Ha  @Hs  @Hd  @Hf  _    _    @Hj  @Hk  @Hl  @Hsc  _
+  _                                                               _
+                                                       @nav
+)
+
+(deflayer nomods
+        _  o  _  _
+  _     a   s   d   f   _    _    j    k    l    ;     '
+  _                                                               _
+                                                       @nav
+)
+
+(deflayer arrows
+                                             pgup  home up  end
+  _     lshft lctl lalt lmeta esc  _     _  pgdn  left down rght
+  _                                                             _
+                _
+)

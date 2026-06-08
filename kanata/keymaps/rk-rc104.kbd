@@ -1,0 +1,83 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(platform (macos)
+  ;; Only on macos, use command arrows to jump/delete words
+  ;; because command is used for so many other things
+  ;; and it's weird that these cases use alt.
+  (defoverrides
+    ;; (lmet bspc) (lalt bspc)
+    ;; (lctrl lmet left) (lctrl lmet left) ;; don't override these though
+    ;; (lmet left) (lalt left)
+    ;; (lctrl lmet right) (lctrl right)
+    ;; (lmet right) (lalt right)
+    ;; (lalt tab) (lmeta tab)
+  )
+)
+
+(defvar
+  tap-time 200
+  hold-time 300
+)
+
+(defsrc
+  caps  a     s     d     f     g    h     j     k     l     ;     '
+  lctrl lmeta
+)
+
+(deflayer default
+  @cap  @lma  @lms  @lmd  @lmf  _    _    @rmj  @rmk  @rml  @rmSC _
+  lmeta lctrl
+)
+
+
+(defalias
+  ;; cap (tap-hold-press $tap-time $hold-time caps lmeta)
+  apo (tap-hold-press $tap-time $hold-time ' lctrl)
+  cap (tap-hold-press $tap-time $hold-time esc lmeta)
+  lma (chord left_mods a)
+  lms (chord left_mods s)
+  lmd (chord left_mods d)
+  lmf (chord left_mods f)
+  rmj  (chord rght_mods j)
+  rmk  (chord rght_mods k)
+  rml  (chord rght_mods l)
+  rmSC (chord rght_mods ;)
+)
+
+(defchords left_mods 100
+  (a      ) a
+  (  s    ) s
+  (    d  ) d
+  (      f) f
+  (    d f) lctrl
+  (  s d  ) lalt
+  (a s    ) lmeta
+
+  (  s   f) (multi lctrl lalt)
+  (a     f) (multi lctrl      lmeta)
+  (a   d  ) (multi       lalt lmeta)
+  (a s   f) (multi lctrl      lmeta lshft)
+  (a   d f) (multi lctrl lalt       lshft)
+  (  s d f) (multi       lalt lmeta lshft)
+  (a s d f) (multi lctrl lalt lmeta lshft)
+)
+
+(defchords rght_mods 100
+  (      ;) ;
+  (     l ) l
+  (  k    ) k
+  (j      ) j
+  (j k   ) lctrl
+  (  k l  ) lalt
+  (    l ;) lmeta
+
+  (j   l  ) (multi lctrl lalt)
+  (j     ;) (multi lctrl      lmeta)
+  (  k   ;) (multi       lalt lmeta)
+  (j   l ;) (multi lctrl      lmeta lshft)
+  (j k   ;) (multi lctrl lalt       lshft)
+  (j k l  ) (multi       lalt lmeta lshft)
+  (j k l ;) (multi lctrl lalt lmeta lshft)
+)

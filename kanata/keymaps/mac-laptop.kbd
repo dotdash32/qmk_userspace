@@ -1,0 +1,96 @@
+
+
+(defcfg
+  process-unmapped-keys yes
+  ;;tap-hold-require-prior-idle 150
+)
+
+(defvar
+  tap-time 150
+  hold-time 300
+  chord-time 50 ;; keys down within this time
+)
+
+(defsrc
+
+                 y u i o  p  { } \
+  caps  a s d f g h j k l  ;   '
+  lsft                        rsft
+                        ralt
+)
+
+(deflayer default
+        _ _ _  _  _  _  _  _
+  @cap  @lma  @lms  @lmd  @lmf  _    _    @rmj  @rmk  @rml  @rmSC  _
+  _                                                               _
+                                                       @nav
+)
+
+(deflayer arrows
+                                    _   _    pgup  home up  end del bspc
+  _     lshft lmeta lalt lctl esc     _     _  pgdn  left down rght
+  _                                                             _
+                _
+)
+
+(deflayer nav2
+                                    pgup  home up  end _  _  del bspc
+  _     lshft lmeta lalt lctl esc    pgdn  left down rght _ _
+  _                                                             _
+                _
+)
+
+(defalias
+  ;; cap (tap-hold-press $tap-time $hold-time caps lmeta)
+  cap lmeta
+  ;; cap (tap-hold-press $tap-time $hold-time esc lmeta)
+
+  nav (layer-while-held arrows)
+  apo (tap-hold-press $tap-time $hold-time ' lctrl)
+  ;;space_nav (tap-hold-press $tap-time $hold-time spc nav2)
+
+  lma (chord left_mods a)
+  lms (chord left_mods s)
+  lmd (chord left_mods d)
+  lmf (chord left_mods f)
+  rmj  (chord rght_mods j)
+  rmk  (chord rght_mods k)
+  rml  (chord rght_mods l)
+  rmSC (chord rght_mods ;)
+)
+
+(defchords left_mods $chord-time
+  (a      ) a
+  (  s    ) s
+  (    d  ) d
+  (      f) f
+  (    d f) lctrl
+  (  s d  ) lalt
+  (a s    ) lmeta
+
+  (  s   f) (multi lctrl lalt)
+  (a     f) (multi lctrl      lmeta)
+  (a   d  ) (multi       lalt lmeta)
+  (a s   f) (multi lctrl            lshft)
+  (a   d f) (multi            lmeta lshft)
+  (  s d f) (multi       lalt       lshft)
+  (a s d f) (multi lctrl lalt lmeta lshft)
+)
+
+(defchords rght_mods $chord-time
+  (      ;) ;
+  (     l ) l
+  (  k    ) k
+  (j      ) j
+  (j k   ) lctrl
+  (  k l  ) lalt
+  (    l ;) lmeta
+
+  (j   l  ) (multi lctrl lalt)
+  (j     ;) (multi lctrl      lmeta)
+  (  k   ;) (multi       lalt lmeta)
+  (j   l ;) (multi lctrl            lshft)
+  (j k   ;) (multi            lmeta lshft)
+  (j k l  ) (multi       lalt       lshft)
+  (j k l ;) (multi lctrl lalt lmeta lshft)
+)
