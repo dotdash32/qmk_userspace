@@ -1,0 +1,158 @@
+#|
+Infinity 60 keyboard config with advanced home-row-mods.
+Converted from QMK JSON keymap.
+
+Key features:
+- Advanced HRM with rapid typing support
+- Home row mods: A(shift), S(gui), D(layer2), F(ctrl), G(alt)
+                 H(alt), J(ctrl), K(layer2), L(gui), ;(shift)
+- Layer tap on Space (layer 3)
+- Multiple function layers for navigation, numbers, symbols, and media
+|#
+
+(defcfg
+  process-unmapped-keys yes
+  tap-hold-require-prior-idle 50
+)
+
+(defvar
+  tap-time 150
+  hold-time 200
+
+  left-hand-keys (
+    q w e r t
+    a s d f g
+    z x c v b
+  )
+  right-hand-keys (
+    y u i o p
+    h j k l ;
+    n m , . /
+  )
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lalt lmet           spc            rmet ralt
+)
+
+(deffakekeys
+  to-base (layer-switch base)
+)
+
+(defalias
+  ;; Auto-disable mods on rapid typing
+  tap (multi
+    (layer-switch nomods)
+    (on-idle-fakekey to-base tap 20)
+  )
+
+  CAP (caps-word 2000)
+
+  ;; Grave escape (Esc normally, grave when shifted)
+  gesc (tap-hold $tap-time $hold-time esc grv)
+
+  ;; Layer toggles and momentary
+  LsN (layer-while-held simple-nav)
+  Lmd (layer-while-held media)
+
+  ;; Left hand home row mods
+  Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) lsft $left-hand-keys)
+  Hs (tap-hold-release-keys $tap-time $hold-time (multi s @tap) lmet $left-hand-keys)
+  Hd (tap-hold-release-keys $tap-time $hold-time (multi d @tap) (layer-while-held num) $left-hand-keys)
+  Hf (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lctl $left-hand-keys)
+  Hg (tap-hold-release-keys $tap-time $hold-time (multi g @tap) lalt $left-hand-keys)
+
+  ;; Right hand home row mods
+  Hh (tap-hold-release-keys $tap-time $hold-time (multi h @tap) ralt $right-hand-keys)
+  Hj (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rctl $right-hand-keys)
+  Hk (tap-hold-release-keys $tap-time $hold-time (multi k @tap) (layer-while-held num) $right-hand-keys)
+  Hl (tap-hold-release-keys $tap-time $hold-time (multi l @tap) rmet $right-hand-keys)
+  Hsc (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) rsft $right-hand-keys)
+
+  ;; V and N as gui tap-hold
+  Hv (tap-hold-release-keys $tap-time $hold-time (multi v @tap) lmet $left-hand-keys)
+  Hn (tap-hold-release-keys $tap-time $hold-time (multi n @tap) rmet $right-hand-keys)
+
+  ;; Space as layer 3 tap-hold
+  ;; Disable require-prior-idle for immediate layer activation
+  spcNav (tap-hold $tap-time $hold-time spc (layer-while-held vim-nav) (require-prior-idle 0))
+
+  ;; Number layer mods
+  HaN (tap-hold-release-keys $tap-time $hold-time (multi esc @tap) lsft $left-hand-keys)
+  HsN (tap-hold-release-keys $tap-time $hold-time (multi bspc @tap) lmet $left-hand-keys)
+  HgN (tap-hold-release-keys $tap-time $hold-time (multi tab @tap) lalt $left-hand-keys)
+  ;; no "d, f" -> transparent
+  ;; no left hands -> transparent
+  HcN (tap-hold-release-keys $tap-time $hold-time (multi bspc @tap) lalt $right-hand-keys)
+  HhN (tap-hold-release-keys $tap-time $hold-time (multi @CAP @tap) ralt $right-hand-keys)
+
+
+  ;; vim nav mods
+  HaV (tap-hold-release-keys $tap-time $hold-time (multi a @tap) lsft $left-hand-keys)
+  HsV (tap-hold-release-keys $tap-time $hold-time (multi s @tap) (layer-while-held num) $left-hand-keys)
+  HdV (tap-hold-release-keys $tap-time $hold-time (multi s @tap) lmet $left-hand-keys)
+  HfV (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lctl $left-hand-keys)
+  HgV (tap-hold-release-keys $tap-time $hold-time (multi tab @tap) lalt $left-hand-keys)
+  HbV (tap-hold-release-keys $tap-time $hold-time (multi @CAP @tap) lalt $left-hand-keys)
+  HvV (tap-hold-release-keys $tap-time $hold-time (multi v @tap) lmet $left-hand-keys)
+
+  HhV (tap-hold-release-keys $tap-time $hold-time (multi left @tap) ralt $right-hand-keys)
+  HjV (tap-hold-release-keys $tap-time $hold-time (multi down @tap) rctl $right-hand-keys)
+  HkV (tap-hold-release-keys $tap-time $hold-time (multi up @tap) (layer-while-held num) $right-hand-keys)
+  HlV (tap-hold-release-keys $tap-time $hold-time (multi right @tap) ralt $right-hand-keys)
+  HcV (tap-hold-release-keys $tap-time $hold-time (multi enter @tap) ralt $right-hand-keys) ;; semi-colon
+  ;;HpN (tap-hold-release-keys $tap-time $hold-time (multi bspc @tap) ralt $right-hand-keys) ;; apostrophe
+
+)
+
+(deflayer base
+  grv   1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab   q    w    e    r    t    y    u    i    o    p    [    ]    \
+  lmet  @Ha  @Hs  @Hd  @Hf  @Hg  @Hh  @Hj  @Hk  @Hl  @Hsc '    ret
+  lsft  z    x    c    @Hv  b    @Hn  m    ,    .    /    rsft
+  lctl  lalt lmet           @spcNav        rmet @LsN
+)
+
+(deflayer nomods
+  grv   1    2    3    4    5    6    7    8    9    0    -    =    \
+  tab   q    w    e    r    t    y    u    i    o    p    [    ]    bspc
+  lctl  a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft  z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl  lalt lmet           spc             rmet _
+)
+
+(deflayer simple-nav
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
+  _    _    _    _    _    _    _    _    pgup home up   end  del  _
+  _    _    _    _    _    _    _    _    pgdn left down rght ret
+  _    _    _    _    _    _    _    _    [    ]    _    _
+  _    _    _              _              _    _
+)
+
+(deflayer num
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    1    2    3    4    5    6    7    8    9    0    _    _    _
+  _    @HaN @HsN _    _    @HgN @HhN  _    _    _    @HcN _    _
+  _    grv  -    =    [    ]    \    '    ,    .    /    _
+  _    _    _              _              _    _
+)
+
+(deflayer vim-nav
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    esc  bspc del  r    t    home pgdn pgup end  _    lmet _    _
+  _    @HaV @HsV @HdV @HfV @HgV @HhV @HjV @HkV @HlV @HcV ralt _
+  _    z    x    c    @HvV @CAP  _    _    _    _    _    _
+  _    _    _              _              _    _
+)
+
+(deflayer media
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    volu _    _    _
+  _    _    _    _    _    _    _    _    _    _    vold _    _
+  _    _    _    _    _    _    _    _    prev next pp   _    _
+  _    _    _              _              _    _
+)
