@@ -2,7 +2,7 @@
 # Cancel out standard features for faster bootup
 # BOOTMAGIC_ENABLE = no
 COMMAND_ENABLE = no
-CONSOLE_ENABLE = no
+CONSOLE_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = no
 RGBLIGHT_ENABLE = no

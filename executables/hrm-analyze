@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+"""Analyze QMK console output for home-row-mod shift misfires.
+
+Detects patterns like:
+  - Shift key pressed, released as tap (tap.count > 0) -> produced 'f'/'j' instead of shift
+  - Followed by backspace within a short window -> user correcting the misfire
+
+Usage:
+  qmk console | tee /tmp/hrm.log
+  # then later:
+  hrm-analyze /tmp/hrm.log
+
+  # or live:
+  qmk console | hrm-analyze -
+"""
+
+import sys
+import re
+import argparse
+from collections import defaultdict
+
+SFT_DN_RE = re.compile(r'SFT_DN:0x([0-9A-Fa-f]+) t=(\d+)')
+SFT_UP_RE = re.compile(r'SFT_UP:0x([0-9A-Fa-f]+) t=(\d+) tap=(\d+)')
+BSPC_RE = re.compile(r'BSPC t=(\d+)')
+
+KEYCODE_NAMES = {
+    0x4106: "LSFT_T(KC_F)",
+    0x410A: "RSFT_T(KC_J)",
+    0x411C: "LSFT_T(KC_Z)",
+    0x4138: "RSFT_T(KC_SLSH)",
+}
+
+CORRECTION_WINDOW_MS = 1000
+
+
+def timer_diff(a, b):
+    """Handle 16-bit timer wraparound."""
+    return (a - b) & 0xFFFF
+
+
+def analyze(stream):
+    misfires = []
+    stats = defaultdict(lambda: {"taps": 0, "holds": 0, "misfires": 0})
+
+    pending_tap = None  # (keycode, down_time, up_time)
+    last_down = {}  # keycode -> time
+
+    for line in stream:
+        line = line.strip()
+
+        m = SFT_DN_RE.search(line)
+        if m:
+            kc = int(m.group(1), 16)
+            t = int(m.group(2))
+            last_down[kc] = t
+            continue
+
+        m = SFT_UP_RE.search(line)
+        if m:
+            kc = int(m.group(1), 16)
+            t = int(m.group(2))
+            tap_count = int(m.group(3))
+            down_time = last_down.get(kc, t)
+            hold_duration = timer_diff(t, down_time)
+
+            if tap_count > 0:
+                stats[kc]["taps"] += 1
+                pending_tap = (kc, down_time, t, hold_duration)
+            else:
+                stats[kc]["holds"] += 1
+                pending_tap = None
+            continue
+
+        m = BSPC_RE.search(line)
+        if m and pending_tap:
+            bspc_time = int(m.group(1))
+            kc, down_time, up_time, hold_duration = pending_tap
+            gap = timer_diff(bspc_time, up_time)
+            if gap < CORRECTION_WINDOW_MS:
+                stats[kc]["misfires"] += 1
+                misfires.append({
+                    "key": KEYCODE_NAMES.get(kc, f"0x{kc:04X}"),
+                    "hold_ms": hold_duration,
+                    "correction_gap_ms": gap,
+                    "time": up_time,
+                })
+            pending_tap = None
+            continue
+
+    # Report
+    print("=" * 60)
+    print("HOME ROW MOD SHIFT ANALYSIS")
+    print("=" * 60)
+    print()
+
+    for kc, s in sorted(stats.items()):
+        name = KEYCODE_NAMES.get(kc, f"0x{kc:04X}")
+        total = s["taps"] + s["holds"]
+        if total == 0:
+            continue
+        misfire_rate = s["misfires"] / s["taps"] * 100 if s["taps"] > 0 else 0
+        print(f"  {name}:")
+        print(f"    taps={s['taps']}  holds={s['holds']}  misfires={s['misfires']} ({misfire_rate:.1f}% of taps)")
+        print()
+
+    if misfires:
+        print("-" * 60)
+        print("DETECTED MISFIRES (tap followed by backspace):")
+        print("-" * 60)
+        for mf in misfires:
+            print(f"  {mf['key']:20s}  held={mf['hold_ms']:3d}ms  corrected_after={mf['correction_gap_ms']:3d}ms")
+        print()
+        hold_times = [mf["hold_ms"] for mf in misfires]
+        print(f"  Misfire hold durations: min={min(hold_times)}ms  max={max(hold_times)}ms  avg={sum(hold_times)//len(hold_times)}ms")
+        print(f"  Suggestion: if avg hold is close to TAPPING_TERM, consider raising it")
+        print(f"  Suggestion: if correction is fast, flow_tap_term may be too low")
+    else:
+        print("No misfires detected.")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Analyze HRM shift misfires from QMK console")
+    parser.add_argument("logfile", nargs="?", default="-",
+                       help="Log file path, or - for stdin (default: stdin)")
+    args = parser.parse_args()
+
+    if args.logfile == "-":
+        analyze(sys.stdin)
+    else:
+        with open(args.logfile) as f:
+            analyze(f)
+
+
+if __name__ == "__main__":
+    main()

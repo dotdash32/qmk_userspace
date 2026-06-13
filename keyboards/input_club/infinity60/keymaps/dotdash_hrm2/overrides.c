@@ -1,4 +1,29 @@
 #include QMK_KEYBOARD_H
+#include "print.h"
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (debug_enable) {
+        switch (keycode) {
+            case LSFT_T(KC_F):
+            case RSFT_T(KC_J):
+            case LSFT_T(KC_Z):
+            case RSFT_T(KC_SLSH):
+                if (record->event.pressed) {
+                    dprintf("SFT_DN:0x%04X t=%u\n", keycode, record->event.time);
+                } else {
+                    dprintf("SFT_UP:0x%04X t=%u tap=%u\n", keycode, record->event.time,
+                            record->tap.count);
+                }
+                break;
+            case KC_BSPC:
+                if (record->event.pressed) {
+                    dprintf("BSPC t=%u\n", record->event.time);
+                }
+                break;
+        }
+    }
+    return true;
+}
 
 bool caps_word_press_user(uint16_t keycode) {
     switch (keycode) {
