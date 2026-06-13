@@ -58,7 +58,7 @@ Key features:
   38 50
   (3  ) 3
   (  8) 8
-  (3 8 ) (layer-toggle num)
+  (3 8) (layer-toggle num)
 )
 
 (defalias
@@ -76,7 +76,7 @@ Key features:
   ;; Layer toggles and momentary
   LsN (layer-while-held simple-nav)
   Lmd (layer-while-held media)
-  LapN (layer-tHrbVoggle num)
+  LapN (layer-toggle num)
 
   ;; Left hand home row mods (hrm2, rctl→cmd)
   Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
@@ -86,18 +86,18 @@ Key features:
   Hg (tap-hold-release-keys $tap-time $hold-time (multi g @tap) lalt $left-hand-keys)
 
   ;; Right hand home row mods (hrm2, rctl→cmd)
-  Hh (tap-hold-release-keys $tap-time $hold-time (multi h @tap) lalt $right-hand-keys)
-  Hj (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rsft $right-hand-keys)
-  Hk (tap-hold $tap-time $hold-time k (layer-while-held num))
-  Hl (tap-hold-release-keys $tap-time $hold-time (multi l @tap) rmet $right-hand-keys)
+  Hh  (tap-hold-release-keys $tap-time $hold-time (multi h @tap) lalt $right-hand-keys)
+  Hj  (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rsft $right-hand-keys)
+  Hk  (tap-hold $tap-time $hold-time k (layer-while-held num))
+  Hl  (tap-hold-release-keys $tap-time $hold-time (multi l @tap) rmet $right-hand-keys)
   Hsc (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) ralt $right-hand-keys)
 
   ;; Bottom row mods (hrm2, rctl→cmd)
-  Hz (tap-hold-release-keys $tap-time $hold-time (multi z @tap) lsft $left-hand-keys)
-  Hx (tap-hold-release-keys $tap-time $hold-time (multi x @tap) lmet $left-hand-keys)
-  Hc (tap-hold-release-keys $tap-time $hold-time (multi c @tap) lalt $left-hand-keys)
-  Hv (tap-hold-release-keys $tap-time $hold-time (multi v @tap) lmet $left-hand-keys)
-  Hm (tap-hold-release-keys $tap-time $hold-time (multi m @tap) rmet $right-hand-keys)
+  Hz  (tap-hold-release-keys $tap-time $hold-time (multi z @tap) lsft $left-hand-keys)
+  Hx  (tap-hold-release-keys $tap-time $hold-time (multi x @tap) lmet $left-hand-keys)
+  Hc  (tap-hold-release-keys $tap-time $hold-time (multi c @tap) lalt $left-hand-keys)
+  Hv  (tap-hold-release-keys $tap-time $hold-time (multi v @tap) lmet $left-hand-keys)
+  Hm  (tap-hold-release-keys $tap-time $hold-time (multi m @tap) rmet $right-hand-keys)
   Hco (tap-hold-release-keys $tap-time $hold-time (multi , @tap) lalt $right-hand-keys)
   Hdo (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rmet $right-hand-keys)
   Hsl (tap-hold-release-keys $tap-time $hold-time (multi / @tap) rsft $right-hand-keys)
@@ -106,47 +106,47 @@ Key features:
   spcNav (tap-hold $tap-time $hold-time spc (layer-while-held vim-nav))
 
   ;; Number layer home row mods (hrm2, rctl→cmd)
-  HaN (tap-hold-release-keys $tap-time $hold-time (multi 1 @tap) ralt $left-hand-keys)
-  HsN (tap-hold-release-keys $tap-time $hold-time (multi 2 @tap) rmet $left-hand-keys)
+  HaN  (tap-hold-release-keys $tap-time $hold-time (multi 1 @tap) ralt $left-hand-keys)
+  HsN  (tap-hold-release-keys $tap-time $hold-time (multi 2 @tap) rmet $left-hand-keys)
   ;; d is already layer-tap (num), acts as 3 on this layer
-  HfN (tap-hold-release-keys $tap-time $hold-time (multi 4 @tap) lsft $left-hand-keys)
-  HgN (tap-hold-release-keys $tap-time $hold-time (multi 5 @tap) lalt $left-hand-keys)
-  HhN (tap-hold-release-keys $tap-time $hold-time (multi 6 @tap) lalt $right-hand-keys)
-  HjN (tap-hold-release-keys $tap-time $hold-time (multi 7 @tap) rsft $right-hand-keys)
+  HfN  (tap-hold-release-keys $tap-time $hold-time (multi 4 @tap) lsft $left-hand-keys)
+  HgN  (tap-hold-release-keys $tap-time $hold-time (multi 5 @tap) lalt $left-hand-keys)
+  HhN  (tap-hold-release-keys $tap-time $hold-time (multi 6 @tap) lalt $right-hand-keys)
+  HjN  (tap-hold-release-keys $tap-time $hold-time (multi 7 @tap) rsft $right-hand-keys)
   ;; k is already layer-tap (num), acts as 8 on this layer
-  HlN (tap-hold-release-keys $tap-time $hold-time (multi 9 @tap) rmet $right-hand-keys)
+  HlN  (tap-hold-release-keys $tap-time $hold-time (multi 9 @tap) rmet $right-hand-keys)
   HscN (tap-hold-release-keys $tap-time $hold-time (multi ' @tap) ralt $right-hand-keys)
 
   ;; Number layer bottom row mods (hrm2, rctl→cmd)
-  HzN (tap-hold-release-keys $tap-time $hold-time (multi grv @tap) lsft $left-hand-keys)
-  HxN (tap-hold-release-keys $tap-time $hold-time (multi S-x @tap) lmet $left-hand-keys)
-  HcN (tap-hold-release-keys $tap-time $hold-time (multi S-c @tap) lalt $left-hand-keys)
-  HvN (tap-hold-release-keys $tap-time $hold-time (multi S-v @tap) lmet $left-hand-keys)
-  HmN (tap-hold-release-keys $tap-time $hold-time (multi 0 @tap) rmet $right-hand-keys)
+  HzN  (tap-hold-release-keys $tap-time $hold-time (multi grv @tap) lsft $left-hand-keys)
+  HxN  (tap-hold-release-keys $tap-time $hold-time (multi cut @tap) lmet $left-hand-keys)
+  HcN  (tap-hold-release-keys $tap-time $hold-time (multi copy @tap) lalt $left-hand-keys)
+  HvN  (tap-hold-release-keys $tap-time $hold-time (multi paste @tap) lmet $left-hand-keys)
+  HmN  (tap-hold-release-keys $tap-time $hold-time (multi 0 @tap) rmet $right-hand-keys)
   HcoN (tap-hold-release-keys $tap-time $hold-time (multi , @tap) lalt $right-hand-keys)
   HdoN (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rmet $right-hand-keys)
   HslN (tap-hold-release-keys $tap-time $hold-time (multi ret @tap) rsft $right-hand-keys)
 
   ;; Vim nav mods (hrm2, rctl→cmd)
-  HaV (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
-  HsV (tap-hold-release-keys $tap-time $hold-time (multi s @tap) rmet $left-hand-keys)
-  HdV (tap-hold $tap-time $hold-time d (layer-while-held num))
-  HfV (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lsft $left-hand-keys)
-  HgV (tap-hold-release-keys $tap-time $hold-time (multi tab @tap) lalt $left-hand-keys)
-  HzV (tap-hold-release-keys $tap-time $hold-time (multi z @tap) lsft $left-hand-keys)
-  HxV (tap-hold-release-keys $tap-time $hold-time (multi x @tap) lmet $left-hand-keys)
-  HcV (tap-hold-release-keys $tap-time $hold-time (multi c @tap) lalt $left-hand-keys)
-  HvV (tap-hold-release-keys $tap-time $hold-time (multi v @tap) lmet $left-hand-keys)
+  HaV  (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
+  HsV  (tap-hold-release-keys $tap-time $hold-time (multi s @tap) rmet $left-hand-keys)
+  HdV  (tap-hold $tap-time $hold-time d (layer-while-held num))
+  HfV  (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lsft $left-hand-keys)
+  HgV  (tap-hold-release-keys $tap-time $hold-time (multi tab @tap) lalt $left-hand-keys)
+  HzV  (tap-hold-release-keys $tap-time $hold-time (multi z @tap) lsft $left-hand-keys)
+  HxV  (tap-hold-release-keys $tap-time $hold-time (multi x @tap) lmet $left-hand-keys)
+  HcV  (tap-hold-release-keys $tap-time $hold-time (multi c @tap) lalt $left-hand-keys)
+  HvV  (tap-hold-release-keys $tap-time $hold-time (multi v @tap) lmet $left-hand-keys)
 
-  HhV (tap-hold-release-keys $tap-time $hold-time (multi left @tap) lalt $right-hand-keys)
-  HjV (tap-hold-release-keys $tap-time $hold-time (multi down @tap) rsft $right-hand-keys)
-  HkV (tap-hold $tap-time $hold-time up (layer-while-held num))
-  HlV (tap-hold-release-keys $tap-time $hold-time (multi right @tap) rmet $right-hand-keys)
+  HhV  (tap-hold-release-keys $tap-time $hold-time (multi left @tap) lalt $right-hand-keys)
+  HjV  (tap-hold-release-keys $tap-time $hold-time (multi down @tap) rsft $right-hand-keys)
+  HkV  (tap-hold $tap-time $hold-time up (layer-while-held num))
+  HlV  (tap-hold-release-keys $tap-time $hold-time (multi right @tap) rmet $right-hand-keys)
   HscV (tap-hold-release-keys $tap-time $hold-time (multi ' @tap) ralt $right-hand-keys)
-  HmV (tap-hold-release-keys $tap-time $hold-time (multi spc @tap) rmet $right-hand-keys)
+  HmV  (tap-hold-release-keys $tap-time $hold-time (multi spc @tap) rmet $right-hand-keys)
   HcoV (tap-hold-release-keys $tap-time $hold-time (multi ] @tap) lalt $right-hand-keys)
   HdoV (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rmet $right-hand-keys)
-  HentV (tap-hold-release-keys $tap-time $hold-time (multi ret @tap) rsft $right-hand-keys)
+  HslV (tap-hold-release-keys $tap-time $hold-time (multi ret @tap) rsft $right-hand-keys)
 )
 
 (deflayer base
@@ -185,7 +185,7 @@ Key features:
   _    _    _    _    _    _    _    _    _     _     _     _    _    _
   _    q    bspc del  esc  t    home pgdn pgup  end   _     _    _    _
   _    @HaV @HsV @HdV @HfV @HgV @HhV @HjV @HkV  @HlV  @HscV ralt _
-  _    @HzV @HxV @HcV @HvV _    [    @HmV @HcoV @HdoV @HentV _
+  _    @HzV @HxV @HcV @HvV _    [    @HmV @HcoV @HdoV @HslV _
   _    _    _              _              _     _
 )
 
