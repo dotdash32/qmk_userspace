@@ -97,3 +97,34 @@ uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_
     }
     return term;
 }
+
+// Layer Word callbacks
+uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
+    switch (keycode) {
+        case QK_USER_1:
+            return 2;
+        default:
+            return 0;
+    }
+}
+
+bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *record) {
+    switch (layer) {
+        case 2:
+            switch (keycode) {
+                case KC_1 ... KC_0:
+                case KC_MINS:
+                case KC_EQL:
+                case KC_BSLS:
+                case KC_GRV:
+                case KC_DOT:
+                case KC_COMM:
+                case KC_BSPC:
+                case KC_DEL:
+                    return true;
+                default:
+                    return false;
+            }
+    }
+    return false;
+}
