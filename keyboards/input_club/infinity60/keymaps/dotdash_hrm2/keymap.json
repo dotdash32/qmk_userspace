@@ -136,7 +136,7 @@
       "KC_TRNS",
       "KC_TRNS"
     ],
-    [ // vim Nav
+    [ // number / symbol layer
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
@@ -158,7 +158,7 @@
       "KC_DEL",
       "KC_ESC",
       "CW_TOGG",
-      "KC_TRNS",
+      "QK_USER_0",
       "KC_MINS",
       "KC_EQL",
       "KC_BSLS",
@@ -181,7 +181,7 @@
       "KC_TRNS",
       "KC_TRNS",
       "LSFT_T(KC_GRV)",
-      "LCTL_T(KC_CUT)",
+      "LCTL_T(QK_USER_0)",
       "LALT_T(KC_COPY)",
       "LGUI_T(KC_PSTE)",
       "CW_TOGG",

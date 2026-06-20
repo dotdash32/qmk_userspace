@@ -2,6 +2,20 @@
 #include "print.h"
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case QK_USER_0:
+        case LCTL_T(QK_USER_0):
+            if (record->event.pressed) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_ENT)) SS_DELAY(100))
+                SEND_STRING("```" SS_LSFT(SS_TAP(X_ENT)) SS_DELAY(100));
+                tap_code(KC_PSTE);
+                SEND_STRING(SS_DELAY(50) SS_LSFT(SS_TAP(X_ENT)) "```");
+            }
+            return false;
+        default:
+            break;
+    }
+
     if (debug_enable) {
         switch (keycode) {
             case LSFT_T(KC_F):
