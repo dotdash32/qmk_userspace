@@ -3,7 +3,7 @@
   "notes": "Translated from input_club/infinity60/keymaps/dotdash. Keeps alphas and home row mods intact, discards number row and outer modifiers.",
   "version": 1,
   "keyboard": "maple_computing/minidox/rev1",
-  "keymap": "dotdash",
+  "keymap": "dotdash1",
   "layout": "LAYOUT_split_3x5_3",
   "layers": [
     [
