@@ -98,6 +98,29 @@ uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_
     return term;
 }
 
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J):
+            // disable only on HOLD_ON_OTHER_KEY_PRESS key
+            return false;
+        default:  // use this for most keys
+            return true;
+    }
+}
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J):
+            // make it easier to shift while fast typing
+            return true;
+        default:
+            // Most keys are just PERMISSIVE_HOLD
+            return false;
+    }
+}
+
 // Layer Word callbacks
 uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
     switch (keycode) {
