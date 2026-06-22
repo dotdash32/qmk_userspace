@@ -55,8 +55,8 @@ Key features:
 
 (defchords
   dk 50
-  (d  ) @Hd
-  (  k) @Hk
+  (d  ) @HdExp
+  (  k) @HkExp
   (d k) (layer-toggle num)
 )
 
@@ -87,14 +87,16 @@ Key features:
   ;; Left hand home row mods (hrm2, rctl→cmd)
   Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
   Hs (tap-hold-release-keys $tap-time $hold-time (multi s @tap) rmet $left-hand-keys)
-  Hd (tap-hold $tap-time $hold-time d (layer-while-held num))
+  HdExp (tap-hold $tap-time $hold-time d (layer-while-held num))
+  Hd (chord dk d)
   Hf (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lsft $left-hand-keys)
   Hg (tap-hold-release-keys $tap-time $hold-time (multi g @tap) lalt $left-hand-keys)
 
   ;; Right hand home row mods (hrm2, rctl→cmd)
   Hh  (tap-hold-release-keys $tap-time $hold-time (multi h @tap) lalt $right-hand-keys)
   Hj  (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rsft $right-hand-keys)
-  Hk  (tap-hold $tap-time $hold-time k (layer-while-held num))
+  HkExp  (tap-hold $tap-time $hold-time k (layer-while-held num))
+  Hk  (chord dk k)
   Hl  (tap-hold-release-keys $tap-time $hold-time (multi l @tap) rmet $right-hand-keys)
   Hsc (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) ralt $right-hand-keys)
 
@@ -115,11 +117,13 @@ Key features:
   HaN  (tap-hold-release-keys $tap-time $hold-time (multi 1 @tap) ralt $left-hand-keys)
   HsN  (tap-hold-release-keys $tap-time $hold-time (multi 2 @tap) rmet $left-hand-keys)
   ;; d is already layer-tap (num), acts as 3 on this layer
+  HdN (chord 38 3)
   HfN  (tap-hold-release-keys $tap-time $hold-time (multi 4 @tap) lsft $left-hand-keys)
   HgN  (tap-hold-release-keys $tap-time $hold-time (multi 5 @tap) lalt $left-hand-keys)
   HhN  (tap-hold-release-keys $tap-time $hold-time (multi 6 @tap) lalt $right-hand-keys)
   HjN  (tap-hold-release-keys $tap-time $hold-time (multi 7 @tap) rsft $right-hand-keys)
   ;; k is already layer-tap (num), acts as 8 on this layer
+  HkN  (chord 38 8)
   HlN  (tap-hold-release-keys $tap-time $hold-time (multi 9 @tap) rmet $right-hand-keys)
   HscN (tap-hold-release-keys $tap-time $hold-time (multi ' @tap) ralt $right-hand-keys)
 
@@ -127,7 +131,7 @@ Key features:
   HzN  (tap-hold-release-keys $tap-time $hold-time (multi grv @tap) lsft $left-hand-keys)
   HxN  (tap-hold-release-keys $tap-time $hold-time (multi cut @tap) lmet $left-hand-keys)
   HcN  (tap-hold-release-keys $tap-time $hold-time (multi copy @tap) lalt $left-hand-keys)
-  HvN  (tap-hold-release-keys $tap-time $hold-time (multi paste @tap) lmet $left-hand-keys)
+  HvN  (tap-hold-release-keys $tap-time $hold-time (multi pste @tap) lmet $left-hand-keys)
   HmN  (tap-hold-release-keys $tap-time $hold-time (multi 0 @tap) rmet $right-hand-keys)
   HcoN (tap-hold-release-keys $tap-time $hold-time (multi , @tap) lalt $right-hand-keys)
   HdoN (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rmet $right-hand-keys)
@@ -182,7 +186,7 @@ Key features:
 (deflayer num
   _    _    _    _    _    _    _    _    _     _     _     _     _    _
   _    q    bspc del  esc  @CAP _    -    =     \     grv   _     _    _
-  _    @HaN @HsN 3    @HfN @HgN @HhN @HjN 8     @HlN  @HscN @LapN _
+  _    @HaN @HsN @HdN @HfN @HgN @HhN @HjN @HkN  @HlN  @HscN @LapN _
   _    @HzN @HxN @HcN @HvN @CAP \    @HmN @HcoN @HdoN @HslN _
   _    _    _              _              _    _
 )
