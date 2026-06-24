@@ -98,6 +98,28 @@ uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_
     return term;
 }
 
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J):
+        case LT(1, KC_SPC):
+            return false;
+        default:
+            return true;
+    }
+}
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J):
+        case LT(1, KC_SPC):
+            return true;
+        default:
+            return false;
+    }
+}
+
 // Layer Word callbacks
 uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
     switch (keycode) {
