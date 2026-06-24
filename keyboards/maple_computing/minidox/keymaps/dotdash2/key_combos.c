@@ -11,6 +11,8 @@ enum combos {
     UJ_LPRN,
     IK_RPRN,
     OL_MINS,
+    QWET_BOOT,
+    YIOP_BOOT,
 };
 
 const uint16_t PROGMEM uj_combo[] = {KC_U, RSFT_T(KC_J), COMBO_END};
@@ -22,6 +24,8 @@ const uint16_t PROGMEM ws_combo[] = {KC_W, RCTL_T(KC_S), COMBO_END};
 const uint16_t PROGMEM zx_combo[] = {LSFT_T(KC_Z), LCTL_T(KC_X), COMBO_END};
 const uint16_t PROGMEM zz_combo[] = {LSFT_T(KC_Z), RALT_T(KC_A), COMBO_END};
 const uint16_t PROGMEM cv_combo[] = {LALT_T(KC_C), LGUI_T(KC_V), COMBO_END};
+const uint16_t PROGMEM qwet_combo[] = {KC_Q, KC_W, KC_E, KC_T, COMBO_END};
+const uint16_t PROGMEM yiop_combo[] = {KC_Y, KC_I, KC_O, KC_P, COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -34,6 +38,8 @@ combo_t key_combos[] = {
     [ZX_GRV_] = COMBO(zx_combo, KC_GRV),
     [ZA_GRV_] = COMBO(zz_combo, KC_GRV),
     [CV_UNDS] = COMBO(cv_combo, KC_UNDS),
+    [QWET_BOOT] = COMBO(qwet_combo, QK_BOOT),
+    [YIOP_BOOT] = COMBO(yiop_combo, QK_BOOT),
 };
 
 #ifdef COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE

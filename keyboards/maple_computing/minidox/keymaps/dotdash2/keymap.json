@@ -3,7 +3,7 @@
   "notes": "",
   "version": 1,
   "keyboard": "maple_computing/minidox/rev1",
-  "keymap": "dotdash2",
+  "keymap": "dotdash2-2026_06_23-2",
   "layout": "LAYOUT_split_3x5_3",
   "layers": [
     [ // base layer, 0
@@ -39,11 +39,11 @@
       "RSFT_T(KC_SLSH)",
       // thumb keys
       "KC_LALT",
-      "KC_LSFT",
+      "LT(5,QK_REP)",
       "LT(2,KC_BSPC)",
       "KC_RCTL",
       "LT(1,KC_SPC)",
-      "MO(3)"
+      "KC_RSFT"
     ],
     // removing old nav layer, replacing w/ vim nav
     [ // vim nav , layer 1
@@ -195,6 +195,44 @@
       "KC_TRNS",
       "KC_TRNS",
       // thumb keys
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS"
+    ],
+    [ // Mouse layer, layer 5
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "MS_WHLL",
+      "MS_WHLD",
+      "MS_WHLU",
+      "MS_WHLR",
+      "KC_TRNS",
+      "MS_BTN4",
+      "MS_BTN2",
+      "MS_BTN3",
+      "MS_BTN1",
+      "MS_BTN5",
+      "MS_LEFT",
+      "MS_DOWN",
+      "MS_UP",
+      "MS_RGHT",
+      "MS_BTN1",
+      "KC_TRNS",
+      "MS_ACL2",
+      "MS_ACL1",
+      "MS_ACL0",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
+      "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
