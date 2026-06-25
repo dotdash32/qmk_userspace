@@ -102,6 +102,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LSFT_T(KC_F):
         case RSFT_T(KC_J):
+        case LT(1, KC_SPC):
             // disable only on HOLD_ON_OTHER_KEY_PRESS key
             return false;
         default:  // use this for most keys
@@ -113,6 +114,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LSFT_T(KC_F):
         case RSFT_T(KC_J):
+        case LT(1, KC_SPC):
             // make it easier to shift while fast typing
             return true;
         default:
