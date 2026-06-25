@@ -100,14 +100,14 @@ Key features:
   Hl  (tap-hold-release-keys $tap-time $hold-time (multi l @tap) rmet $right-hand-keys)
   Hsc (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) ralt $right-hand-keys)
 
-  ;; Bottom row mods (hrm2, rctl→cmd)
+  ;; Bottom row mods (hrm2, always shift, ctrl, alt, gui)
   Hz  (tap-hold-release-keys $tap-time $hold-time (multi z @tap) lsft $left-hand-keys)
-  Hx  (tap-hold-release-keys $tap-time $hold-time (multi x @tap) lmet $left-hand-keys)
+  Hx  (tap-hold-release-keys $tap-time $hold-time (multi x @tap) lctl $left-hand-keys)
   Hc  (tap-hold-release-keys $tap-time $hold-time (multi c @tap) lalt $left-hand-keys)
   Hv  (tap-hold-release-keys $tap-time $hold-time (multi v @tap) lmet $left-hand-keys)
   Hm  (tap-hold-release-keys $tap-time $hold-time (multi m @tap) rmet $right-hand-keys)
   Hco (tap-hold-release-keys $tap-time $hold-time (multi , @tap) lalt $right-hand-keys)
-  Hdo (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rmet $right-hand-keys)
+  Hdo (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rctl $right-hand-keys)
   Hsl (tap-hold-release-keys $tap-time $hold-time (multi / @tap) rsft $right-hand-keys)
 
   ;; Space as vim-nav layer tap-hold; shift+space → underscore
