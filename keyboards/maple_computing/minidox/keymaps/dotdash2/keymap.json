@@ -43,7 +43,7 @@
       "LT(2,KC_BSPC)",
       "KC_RCTL",
       "LT(1,KC_SPC)",
-      "KC_RSFT"
+      "RSFT_T(KC_ESC)"
     ],
     // removing old nav layer, replacing w/ vim nav
     [ // vim nav , layer 1
@@ -90,8 +90,8 @@
       "KC_BSPC",
       "KC_DEL",
       "KC_ESC",
-      "CW_TOGG",
       "ANY(QK_USER_1)",
+      "CW_TOGG",
       "KC_MINS",
       "KC_EQL",
       "KC_BSLS",

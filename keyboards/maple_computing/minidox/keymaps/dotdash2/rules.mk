@@ -1,13 +1,15 @@
 
-# Cancel out standard features for faster bootup
 # BOOTMAGIC_ENABLE = no
 COMMAND_ENABLE = no
 CONSOLE_ENABLE = yes
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 RGBLIGHT_ENABLE = no
-NKRO_ENABLE = no
 
+REPEAT_KEY_ENABLE = yes
+
+# some simplifications
+NKRO_ENABLE = no
 VIA_ENABLE = no
 VIAL_ENABLE = no
 
