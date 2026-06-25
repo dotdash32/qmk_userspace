@@ -1,6 +1,12 @@
 #include QMK_KEYBOARD_H
 #include "print.h"
 
+/* Note on defined keys:
+ ** QK_USER_0: paste code block (``` paste ```)
+ ** QK_USER_1: Layer word for numbers (L2)
+ ** QK_USER_2: nav layer word?? (todo)
+*/
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QK_USER_0:
@@ -80,12 +86,12 @@ uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_
     uint16_t term;
     switch (keycode) {
         case LSFT_T(KC_F):
-            is_shift_mt = true;
-            term = 100;
-            break;
         case RSFT_T(KC_J):
             is_shift_mt = true;
-            term = 125;
+            term = FLOW_TAP_TERM_FAST;
+            break;
+        case LT(1, KC_SPC):
+            term = FLOW_TAP_TERM_FAST;
             break;
         default:
             term = FLOW_TAP_TERM;
