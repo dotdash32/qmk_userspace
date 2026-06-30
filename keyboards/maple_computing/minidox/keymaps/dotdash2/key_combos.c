@@ -16,6 +16,8 @@ enum combos {
     FJ_OSS_,
     QWET_BOOT,
     YIOP_BOOT,
+    QET_MO3_,
+    YIP_MO3_,
 };
 
 const uint16_t PROGMEM uj_combo[] = {KC_U, RSFT_T(KC_J), COMBO_END};
@@ -32,6 +34,8 @@ const uint16_t PROGMEM cv_combo[] = {LALT_T(KC_C), LGUI_T(KC_V), COMBO_END};
 const uint16_t PROGMEM fj_combo[] = {LSFT_T(KC_F), RSFT_T(KC_J), COMBO_END};
 const uint16_t PROGMEM qwet_combo[] = {KC_Q, KC_W, KC_E, KC_T, COMBO_END};
 const uint16_t PROGMEM yiop_combo[] = {KC_Y, KC_I, KC_O, KC_P, COMBO_END};
+const uint16_t PROGMEM qet_combo[] = {KC_Q, KC_E, KC_T, COMBO_END};
+const uint16_t PROGMEM yip_combo[] = {KC_Y, KC_I, KC_P, COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -49,6 +53,8 @@ combo_t key_combos[] = {
     [FJ_OSS_] = COMBO(fj_combo, OSM(MOD_LSFT)),
     [QWET_BOOT] = COMBO(qwet_combo, QK_BOOT),
     [YIOP_BOOT] = COMBO(yiop_combo, QK_BOOT),
+    [QET_MO3_] = COMBO(qet_combo, MO(3)),
+    [YIP_MO3_] = COMBO(yip_combo, MO(3)),
 };
 
 #ifdef COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
