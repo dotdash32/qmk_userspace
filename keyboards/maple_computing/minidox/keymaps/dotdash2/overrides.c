@@ -7,8 +7,28 @@
  ** QK_USER_2: nav layer word?? (todo)
 */
 
+bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *remembered_mods) {
+    switch (keycode) {
+        case LALT_T(KC_R):
+            return false;
+    }
+    return true;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case LALT_T(KC_R):
+            if (record->tap.count) {
+                repeat_key_invoke(&record->event);
+                return false;
+            }
+            return true;
+        case LT(5, KC_S):
+            if (record->tap.count && record->event.pressed) {
+                set_oneshot_mods(MOD_BIT(KC_LSFT));
+                return false;
+            }
+            return true;
         case QK_USER_0:
         case LCTL_T(QK_USER_0):
             if (record->event.pressed) {
