@@ -3,7 +3,7 @@
   "notes": "",
   "version": 1,
   "keyboard": "maple_computing/minidox/rev1",
-  "keymap": "dotdash2-2026_06_30-2",
+  "keymap": "dotdash2-2026_07_01-2",
   "layout": "LAYOUT_split_3x5_3",
   "layers": [
     [ // base layer, 0
@@ -70,7 +70,7 @@
       "LCTL_T(KC_X)",
       "LALT_T(KC_C)",
       "LGUI_T(KC_V)",
-      "ANY(QK_USER_2)",
+      "LCTL(KC_B)",
       "KC_LBRC",
       "LGUI_T(KC_SPC)",
       "LALT_T(KC_RBRC)",
@@ -94,7 +94,7 @@
       "KC_MINS",
       "KC_EQL",
       "KC_BSLS",
-      "KC_GRV",
+      "TG(2)",
       "RALT_T(KC_1)",
       "RCTL_T(KC_2)",
       "LT(2,KC_3)",

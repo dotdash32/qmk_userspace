@@ -8,14 +8,14 @@ RGBLIGHT_ENABLE = no
 
 REPEAT_KEY_ENABLE = yes
 
+LTO_ENABLE = yes
+
 # some simplifications
 NKRO_ENABLE = no
 VIA_ENABLE = no
 VIAL_ENABLE = no
 
 
-# https://docs.qmk.fm/#/custom_quantum_functions?id=deferred-execution
-DEFERRED_EXEC_ENABLE = yes
 
 # https://github.com/qmk/qmk_firmware/issues/19593#issuecomment-1387476045
 # NO_USB_STARTUP_CHECK = yes
