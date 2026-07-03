@@ -18,6 +18,25 @@ import json
 import sys
 from pathlib import Path
 
+USERSPACE_ROOT = Path(__file__).resolve().parent.parent
+
+
+def resolve_keymap_file(args):
+    """Resolve keymap.json path from -kb/-km args or direct file path."""
+    if args.file:
+        return Path(args.file)
+    if args.keyboard and args.keymap:
+        path = USERSPACE_ROOT / "keyboards" / args.keyboard / "keymaps" / args.keymap / "keymap.json"
+        if not path.exists():
+            print(f"Error: keymap not found at {path}", file=sys.stderr)
+            sys.exit(1)
+        return path
+    if args.keyboard or args.keymap:
+        print("Error: both -kb and -km are required when not specifying a file path", file=sys.stderr)
+        sys.exit(1)
+    # Default fallback
+    return Path("keymap.json")
+
 
 def _find_comment_pos(line):
     """Find position of // comment, ignoring those inside string literals."""
@@ -168,7 +187,7 @@ def apply_comments(json_text, comments):
 
 def cmd_strip(args):
     """Strip comments and save them to a sidecar file."""
-    fp = Path(args.file)
+    fp = resolve_keymap_file(args)
     text = fp.read_text()
 
     comments = parse_comments(text)
@@ -195,7 +214,7 @@ def cmd_strip(args):
 
 def cmd_apply(args):
     """Re-apply comments from sidecar file."""
-    fp = Path(args.file)
+    fp = resolve_keymap_file(args)
     sidecar = Path(args.comments) if args.comments else fp.with_suffix(".comments.json")
 
     if not sidecar.exists():
@@ -218,6 +237,22 @@ def cmd_apply(args):
     print(f"Applied {len(comments)} comment(s) from {sidecar.name}")
 
 
+def _add_file_args(subparser):
+    """Add shared file-resolution arguments to a subparser."""
+    subparser.add_argument(
+        "file", nargs="?", default=None,
+        help="Direct path to keymap file (overrides -kb/-km)",
+    )
+    subparser.add_argument(
+        "-kb", "--keyboard",
+        help="Keyboard name (e.g. input_club/infinity60)",
+    )
+    subparser.add_argument(
+        "-km", "--keymap",
+        help="Keymap name (e.g. dotdash_hrm1)",
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -228,10 +263,7 @@ def main():
     strip_parser = subparsers.add_parser(
         "strip", help="Strip // comments and save them to a sidecar file"
     )
-    strip_parser.add_argument(
-        "file", nargs="?", default="keymap.json",
-        help="Input JSONC file (default: keymap.json)",
-    )
+    _add_file_args(strip_parser)
     strip_parser.add_argument(
         "-o", "--output",
         help="Output path for clean JSON (default: overwrite input file)",
@@ -244,10 +276,7 @@ def main():
     apply_parser = subparsers.add_parser(
         "apply", help="Re-apply saved comments from sidecar file"
     )
-    apply_parser.add_argument(
-        "file", nargs="?", default="keymap.json",
-        help="Input JSON file (default: keymap.json)",
-    )
+    _add_file_args(apply_parser)
     apply_parser.add_argument(
         "-o", "--output",
         help="Output path (default: overwrite input file)",
