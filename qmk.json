@@ -1,6 +1,8 @@
 {
     "userspace_version": "1.1",
     "build_targets": [
-        ["input_club/infinity60/rev1", "dotdash_hrm1"]
+        ["input_club/infinity60/rev1", "dotdash_hrm1"],
+        ["maple_computing/minidox/rev1", "dotdash2"],
+        ["handwired/planck", "dotdash1"]
     ]
 }
