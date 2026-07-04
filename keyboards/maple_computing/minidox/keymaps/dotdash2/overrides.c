@@ -23,7 +23,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
-        case LT(5, KC_S):
+        case LT(4, KC_S):
             if (record->tap.count && record->event.pressed) {
                 set_oneshot_mods(MOD_BIT(KC_LSFT));
                 return false;
@@ -154,4 +154,9 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
             }
     }
     return false;
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    state = update_tri_layer_state(state, 1, 4, 5);
+    return state;
 }
