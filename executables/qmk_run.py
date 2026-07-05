@@ -8,6 +8,7 @@ a number/fuzzy-match argument to skip the picker on repeat runs).
 Lives in qmk_userspace but runs qmk commands inside qmk_firmware.
 """
 
+import enum
 import json
 import subprocess
 import sys
@@ -17,6 +18,12 @@ from pathlib import Path
 USERSPACE_ROOT = Path(__file__).resolve().parent.parent
 QMK_FIRMWARE = USERSPACE_ROOT.parent / "qmk_firmware"
 JSONC_TOOL = USERSPACE_ROOT / "executables" / "jsonc_tool.py"
+
+class Action(enum.Enum):
+    COMPILE = "compile"
+    FLASH = "flash"
+    STRIP = "strip"
+    APPLY = "apply"
 
 
 def load_targets():
@@ -112,8 +119,9 @@ def pick_target(targets, selector=None):
 def pick_action():
     print("\nActions:")
     print("  1) compile        - qmk compile")
-    print("  2) strip comments - strip // comments from keymap.json")
-    print("  3) apply comments - restore // comments to keymap.json")
+    print("  2) flash          - qmk flash")
+    print("  3) strip comments - strip // comments from keymap.json")
+    print("  4) apply comments - restore // comments to keymap.json")
     print()
     try:
         choice = input("Select action (number or name): ").strip().lower()
@@ -122,9 +130,10 @@ def pick_action():
         sys.exit(0)
 
     actions = {
-        "1": "compile", "compile": "compile",
-        "2": "strip", "strip": "strip",
-        "3": "apply", "apply": "apply",
+        "1": Action.COMPILE, "compile": Action.COMPILE,
+        "2": Action.FLASH, "flash": Action.FLASH,
+        "3": Action.STRIP, "strip": Action.STRIP,
+        "4": Action.APPLY, "apply": Action.APPLY,
     }
     action = actions.get(choice)
     if not action:
@@ -133,14 +142,14 @@ def pick_action():
     return action
 
 
-def run_compile(keyboard, keymap):
-    cmd = ["qmk", "compile", "-kb", keyboard, "-km", keymap]
+def run_qmk_cmd(action: Action, keyboard: str, keymap: str) -> int:
+    cmd = ["qmk", action.value, "-kb", keyboard, "-km", keymap]
     print(f"\n> {' '.join(cmd)}")
     print(f"  (cwd: {QMK_FIRMWARE})\n")
     return subprocess.run(cmd, cwd=QMK_FIRMWARE).returncode
 
 
-def run_jsonc(action, keyboard, keymap):
+def run_jsonc(action: Action, keyboard: str, keymap: str):
     keymap_dir = resolve_keymap_dir(keyboard, keymap)
     if not keymap_dir:
         print(f"Error: cannot find keymap directory for {keyboard}:{keymap}", file=sys.stderr)
@@ -150,7 +159,7 @@ def run_jsonc(action, keyboard, keymap):
         print(f"Error: {keymap_file} not found", file=sys.stderr)
         return 1
 
-    cmd = [sys.executable, str(JSONC_TOOL), action, str(keymap_file)]
+    cmd = [sys.executable, str(JSONC_TOOL), action.value, str(keymap_file)]
     print(f"\n> {' '.join(cmd)}\n")
     return subprocess.run(cmd).returncode
 
@@ -166,7 +175,7 @@ def main():
         help="Keymap selector: number from the list, or fuzzy name match",
     )
     parser.add_argument(
-        "-a", "--action", choices=["compile", "strip", "apply"],
+        "-a", "--action", choices=list(Action), type=lambda a: Action(a.lower()),
         help="Action to perform (skip action picker)",
     )
     args = parser.parse_args()
@@ -179,8 +188,9 @@ def main():
     keyboard, keymap = pick_target(targets, args.target)
     action = args.action or pick_action()
 
-    if action == "compile":
-        rc = run_compile(keyboard, keymap)
+    print(f"action: {action}")
+    if action == Action.COMPILE or action == Action.FLASH:
+        rc = run_qmk_cmd(action, keyboard, keymap)
     else:
         rc = run_jsonc(action, keyboard, keymap)
 
