@@ -4,8 +4,8 @@
 /* Note on defined keys:
  ** QK_USER_0: paste code block (``` paste ```)
  ** QK_USER_1: Layer word for numbers (L2)
- ** QK_USER_2: layer word for numpad (L7)
- ** QK_USER_3: layer word for numpad (L7) && Swap hands (cad num entry)
+ ** QK_USER_2: layer word for numpad (L4)
+ ** QK_USER_3: layer word for numpad (L4) && Swap hands (cad num entry)
  ** QK_USER_4: nav layer word?? (todo)
 */
 
@@ -19,7 +19,7 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(7, KC_S):
+        case LT(4, KC_S):
             if (record->tap.count && record->event.pressed) {
                 set_oneshot_mods(MOD_BIT(KC_LSFT));
                 return false;
@@ -127,11 +127,11 @@ uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
         case QK_USER_1:
             return 2;
         case QK_USER_2:
-            return 7;
+            return 4;
         case QK_USER_3:  // numpad layer & swap hands
             dprintf("numpad SWAP hands ON");
             swap_hands_on();
-            return 7;
+            return 4;
         default:
             return 0;
     }
@@ -155,7 +155,7 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
                 default:
                     return false;
             }
-        case 7:
+        case 4:
             switch(keycode) {
                 case KC_A ... KC_F: // support hex entry
                 case KC_1 ... KC_0:
@@ -180,7 +180,7 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    state = update_tri_layer_state(state, 1, 7, 5);
+    state = update_tri_layer_state(state, 1, 4, 5);
     return state;
 }
 
