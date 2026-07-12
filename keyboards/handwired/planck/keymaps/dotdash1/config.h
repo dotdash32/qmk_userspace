@@ -16,5 +16,11 @@
 /* Custom shift keys: disable when any mod besides shift is held */
 #define CUSTOM_SHIFT_KEYS_NEGMODS 0xDD // (MOD_MASK_CG | MOD_MASK_ALT)
 
+/* RGH lights! */
+#define RGBLIGHT_LED_COUNT 4
+#define WS2812_DI_PIN D5
+#define RGBLIGHT_EFFECT_BREATHING
+#define RGBLIGHT_RAINBOW_SWIRL
+
 /* Caps word */
 #define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
