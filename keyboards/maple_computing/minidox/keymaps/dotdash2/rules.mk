@@ -6,7 +6,7 @@ EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 RGBLIGHT_ENABLE = no
 
-REPEAT_KEY_ENABLE = yes
+REPEAT_KEY_ENABLE = no
 
 LTO_ENABLE = yes
 
@@ -22,6 +22,9 @@ VIAL_ENABLE = no
 
 # caps word
 CAPS_WORD_ENABLE = yes
+
+# swap hands (CAD use)
+SWAP_HANDS_ENABLE = yes
 
 # key overrides & combos
 COMBO_ENABLE = yes

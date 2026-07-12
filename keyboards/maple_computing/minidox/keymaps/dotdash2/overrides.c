@@ -4,7 +4,9 @@
 /* Note on defined keys:
  ** QK_USER_0: paste code block (``` paste ```)
  ** QK_USER_1: Layer word for numbers (L2)
- ** QK_USER_2: nav layer word?? (todo)
+ ** QK_USER_2: layer word for numpad (L7)
+ ** QK_USER_3: layer word for numpad (L7) && Swap hands (cad num entry)
+ ** QK_USER_4: nav layer word?? (todo)
 */
 
 bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *remembered_mods) {
@@ -17,12 +19,6 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LALT_T(KC_R):
-            if (record->tap.count) {
-                repeat_key_invoke(&record->event);
-                return false;
-            }
-            return true;
         case LT(7, KC_S):
             if (record->tap.count && record->event.pressed) {
                 set_oneshot_mods(MOD_BIT(KC_LSFT));
@@ -130,6 +126,12 @@ uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
     switch (keycode) {
         case QK_USER_1:
             return 2;
+        case QK_USER_2:
+            return 7;
+        case QK_USER_3:  // numpad layer & swap hands
+            dprintf("numpad SWAP hands ON");
+            swap_hands_on();
+            return 7;
         default:
             return 0;
     }
@@ -146,13 +148,34 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
                 case KC_GRV:
                 case KC_DOT:
                 case KC_COMM:
+                case KC_SLSH:
                 case KC_BSPC:
                 case KC_DEL:
                     return true;
                 default:
                     return false;
             }
-    }
+        case 7:
+            switch(keycode) {
+                case KC_A ... KC_F: // support hex entry
+                case KC_1 ... KC_0:
+                case KC_MINS:
+                case KC_EQL:
+                case KC_BSLS:
+                case KC_GRV:
+                case KC_DOT:
+                case KC_COMM:
+                case KC_SLSH:
+                case KC_BSPC:
+                case KC_DEL:
+                case KC_TAB: // spreadsheet mode
+                return true;
+                default:
+                    dprintf("numpad SWAP hands OFF, %d / %s", keycode, keycode);
+                    swap_hands_off();
+                    return false;
+            }
+        }
     return false;
 }
 
@@ -160,3 +183,15 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     state = update_tri_layer_state(state, 1, 7, 5);
     return state;
 }
+
+
+const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
+  {  {0, 4}, {1, 4},   {2, 4},   {3, 4}, {4, 4}  },
+  {  {0, 5}, {1, 5},   {2, 5},   {3, 5}, {4, 5}  },
+  {  {0, 6}, {1, 6},   {2, 6},   {3, 6}, {4, 6}  },
+  {/*{0, 7}, {1, 7},*/ {2, 7},   {3, 7}, {4, 7}  },
+  {  {0, 0}, {1, 0},   {2, 0},   {3, 0}, {4, 0}  },
+  {  {0, 1}, {1, 1},   {2, 1},   {3, 1}, {4, 1}  },
+  {  {0, 2}, {1, 2},   {2, 2},   {3, 2}, {4, 2}  },
+  {  {0, 3}, {1, 3},   {2, 3}, /*{3, 3}, {4, 3}*/},
+};

@@ -53,8 +53,8 @@ combo_t key_combos[] = {
     [FJ_OSS_] = COMBO(fj_combo, OSM(MOD_LSFT)),
     [QWET_BOOT] = COMBO(qwet_combo, QK_BOOT),
     [YIOP_BOOT] = COMBO(yiop_combo, QK_BOOT),
-    [QET_MO3_] = COMBO(qet_combo, MO(3)),
-    [YIP_MO3_] = COMBO(yip_combo, MO(3)),
+    [QET_MO3_] = COMBO(qet_combo, OSL(3)),
+    [YIP_MO3_] = COMBO(yip_combo, OSL(3)),
 };
 
 #ifdef COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
