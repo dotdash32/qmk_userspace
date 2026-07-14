@@ -1,10 +1,10 @@
 
 # BOOTMAGIC_ENABLE = no
 COMMAND_ENABLE = no
-CONSOLE_ENABLE = yes
+CONSOLE_ENABLE = no
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = yes
-RGBLIGHT_ENABLE = no
+RGBLIGHT_ENABLE = yes
 
 REPEAT_KEY_ENABLE = no
 
@@ -30,3 +30,4 @@ SWAP_HANDS_ENABLE = yes
 COMBO_ENABLE = yes
 INTROSPECTION_KEYMAP_C = keyboards/maple_computing/minidox/keymaps/dotdash2/key_combos.c
 SRC += keyboards/maple_computing/minidox/keymaps/dotdash2/overrides.c
+SRC += keyboards/maple_computing/minidox/keymaps/dotdash2/rgb_layers.c
