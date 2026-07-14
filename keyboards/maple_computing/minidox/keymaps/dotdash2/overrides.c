@@ -179,7 +179,10 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
     return false;
 }
 
-// layer_state_set_user is in rgb_layers.c (includes tri-layer logic)
+layer_state_t layer_state_set_user(layer_state_t state) {
+    state = update_tri_layer_state(state, 1, 4, 5);
+    return state;
+}
 
 
 const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
