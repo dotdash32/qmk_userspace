@@ -129,6 +129,7 @@ uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
         case QK_USER_2:
             return 4;
         case QK_USER_3:  // numpad layer & swap hands
+        case LSFT_T(QK_USER_3):
             dprintf("numpad SWAP hands ON");
             swap_hands_on();
             return 4;

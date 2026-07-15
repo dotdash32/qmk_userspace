@@ -3,7 +3,7 @@
   "notes": "",
   "version": 1,
   "keyboard": "maple_computing/minidox/rev1",
-  "keymap": "dotdash2-2026_07_10-4",
+  "keymap": "dotdash2-2026_07_14-2",
   "layout": "LAYOUT_split_3x5_3",
   "layers": [
     [ // base layer, 0
@@ -112,8 +112,8 @@
       "CW_TOGG",
       "KC_BSLS",
       "LGUI_T(KC_0)",
-      "LALT_T(KC_COMM)",
-      "LCTL_T(KC_SLSH)",
+      "LALT_T(KC_SLSH)",
+      "LCTL_T(KC_DOT)",
       "RSFT_T(KC_ENT)",
       // thumb keys
       "KC_TRNS",
@@ -153,7 +153,7 @@
       "KC_MPRV",
       "KC_MNXT",
       "KC_MPLY",
-      "LCTL(KC_L)",
+      "LGUI(KC_L)",
       // thumb keys
       "KC_TRNS",
       "KC_TRNS",
@@ -205,8 +205,8 @@
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "KC_TRNS",
-      "KC_TRNS",
+      "KC_WBAK",
+      "KC_WFWD",
       "MS_WHLL",
       "MS_WHLD",
       "MS_WHLU",
