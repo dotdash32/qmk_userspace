@@ -1,25 +1,27 @@
 
-# Cancel out standard features for faster bootup
 # BOOTMAGIC_ENABLE = no
 COMMAND_ENABLE = no
 CONSOLE_ENABLE = yes
 EXTRAKEY_ENABLE = yes
-MOUSEKEY_ENABLE = no
+MOUSEKEY_ENABLE = yes
 RGBLIGHT_ENABLE = yes
 NKRO_ENABLE = no
+
+REPEAT_KEY_ENABLE = no
+
+LTO_ENABLE = yes # maybe not needed?
 
 VIA_ENABLE = no
 VIAL_ENABLE = no
 
-
 # https://docs.qmk.fm/#/custom_quantum_functions?id=deferred-execution
 DEFERRED_EXEC_ENABLE = yes
 
-# https://github.com/qmk/qmk_firmware/issues/19593#issuecomment-1387476045
-# NO_USB_STARTUP_CHECK = yes
-
 # caps word
 CAPS_WORD_ENABLE = yes
+
+# swap hands (CAD use)
+SWAP_HANDS_ENABLE = yes
 
 # key overrides & combos
 COMBO_ENABLE = yes
