@@ -25,3 +25,4 @@ CAPS_WORD_ENABLE = yes
 COMBO_ENABLE = yes
 INTROSPECTION_KEYMAP_C = keyboards/handwired/planck/keymaps/dotdash1/key_combos.c
 SRC += keyboards/handwired/planck/keymaps/dotdash1/overrides.c
+SRC += keyboards/handwired/planck/keymaps/dotdash1/rgb_layers.c
