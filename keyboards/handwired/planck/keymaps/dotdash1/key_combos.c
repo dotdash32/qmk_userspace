@@ -64,5 +64,6 @@ combo_t key_combos[] = {
 const custom_shift_key_t custom_shift_keys[] = {
     {LT(1,KC_SPC), KC_UNDS},  // Shift Space is _
     {KC_SPC, KC_UNDS},         // Shift Space is _
+    {RALT_T(KC_0), KC_COLN},   // Shift 0 → :
 };
 #endif
