@@ -46,6 +46,13 @@ Key features:
   (defvar cmd_mod rctl)
 )
 
+;; Override shift+space to produce underscore
+;; But exclude this behavior when ctrl, cmd, or alt are held
+(defoverridesv2
+  (lsft spc) (lsft -) (lctl rctl lmet rmet lalt ralt) ()
+  (rsft spc) (rsft -) (lctl rctl lmet rmet lalt ralt) ()
+)
+
 (defsrc
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
@@ -119,8 +126,9 @@ Key features:
   Hdo (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rctl $right-hand-keys)
   Hsl (tap-hold-release-keys $tap-time $hold-time (multi / @tap) rsft $right-hand-keys)
 
-  ;; Space as vim-nav layer tap-hold; shift+space → underscore
-  spcNav (tap-hold $tap-time $hold-time (fork spc - (lsft rsft)) (layer-while-held vim-nav))
+  ;; Space as vim-nav layer tap-hold
+  ;; Note: shift+space -> underscore is handled by defoverridesv2
+  spcNav (tap-hold $tap-time $hold-time spc (layer-while-held vim-nav))
 
   ;; Number layer home row mods (hrm2, rctl→cmd)
   HaN  (tap-hold-release-keys $tap-time $hold-time (multi 1     @tap) ralt $left-hand-keys)
