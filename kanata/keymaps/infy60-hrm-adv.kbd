@@ -58,15 +58,21 @@ Key features:
   to-base (layer-switch base)
 )
 
+(defalias
+  ;; compound/complicated chords
+  HdExp (tap-hold $tap-time $hold-time d (layer-while-held num))
+  HkExp (tap-hold $tap-time $hold-time k (layer-while-held num))
+)
+
 (defchords
-  dk 50
+  num_toggle_pre 50
   (d  ) @HdExp
   (  k) @HkExp
   (d k) (layer-toggle num)
 )
 
 (defchords
-  38 50
+  num_toggle_on 50
   (3  ) 3
   (  8) 8
   (3 8) (layer-toggle num)
@@ -92,16 +98,14 @@ Key features:
   ;; Left hand home row mods (hrm2, rctl→cmd)
   Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
   Hs (tap-hold-release-keys $tap-time $hold-time (multi s @tap) $cmd_mod $left-hand-keys)
-  HdExp (tap-hold $tap-time $hold-time d (layer-while-held num))
-  Hd (chord dk d)
+  HdC (chord num_toggle_pre d)
   Hf (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lsft $left-hand-keys)
   Hg (tap-hold-release-keys $tap-time $hold-time (multi g @tap) lalt $left-hand-keys)
 
   ;; Right hand home row mods (hrm2, rctl→cmd)
   Hh  (tap-hold-release-keys $tap-time $hold-time (multi h @tap) lalt $right-hand-keys)
   Hj  (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rsft $right-hand-keys)
-  HkExp  (tap-hold $tap-time $hold-time k (layer-while-held num))
-  Hk  (chord dk k)
+  HkC  (chord num_toggle_pre k)
   Hl  (tap-hold-release-keys $tap-time $hold-time (multi l @tap) $cmd_mod $right-hand-keys)
   Hsc (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) ralt $right-hand-keys)
 
@@ -122,25 +126,25 @@ Key features:
   HaN  (tap-hold-release-keys $tap-time $hold-time (multi 1 @tap) ralt $left-hand-keys)
   HsN  (tap-hold-release-keys $tap-time $hold-time (multi 2 @tap) $cmd_mod $left-hand-keys)
   ;; d is already layer-tap (num), acts as 3 on this layer
-  HdN (chord 38 3)
+  HdN (chord num_toggle_on 3)
   HfN  (tap-hold-release-keys $tap-time $hold-time (multi 4 @tap) lsft $left-hand-keys)
   HgN  (tap-hold-release-keys $tap-time $hold-time (multi 5 @tap) lalt $left-hand-keys)
   HhN  (tap-hold-release-keys $tap-time $hold-time (multi 6 @tap) lalt $right-hand-keys)
   HjN  (tap-hold-release-keys $tap-time $hold-time (multi 7 @tap) rsft $right-hand-keys)
   ;; k is already layer-tap (num), acts as 8 on this layer
-  HkN  (chord 38 8)
+  HkN  (chord num_toggle_on 8)
   HlN  (tap-hold-release-keys $tap-time $hold-time (multi 9 @tap) $cmd_mod $right-hand-keys)
   HscN (tap-hold-release-keys $tap-time $hold-time (multi ' @tap) ralt $right-hand-keys)
 
   ;; Number layer bottom row mods (hrm2, rctl→cmd)
-  HzN  (tap-hold-release-keys $tap-time $hold-time (multi grv @tap) lsft $left-hand-keys)
-  HxN  (tap-hold-release-keys $tap-time $hold-time (multi cut @tap) lmet $left-hand-keys)
+  HzN  (tap-hold-release-keys $tap-time $hold-time (multi grv  @tap) lsft $left-hand-keys)
+  HxN  (tap-hold-release-keys $tap-time $hold-time (multi cut  @tap) lctl $left-hand-keys)
   HcN  (tap-hold-release-keys $tap-time $hold-time (multi copy @tap) lalt $left-hand-keys)
   HvN  (tap-hold-release-keys $tap-time $hold-time (multi pste @tap) lmet $left-hand-keys)
-  HmN  (tap-hold-release-keys $tap-time $hold-time (multi 0 @tap) lmet $right-hand-keys)
-  HcoN (tap-hold-release-keys $tap-time $hold-time (multi , @tap) lalt $right-hand-keys)
-  HdoN (tap-hold-release-keys $tap-time $hold-time (multi . @tap) rctl $right-hand-keys)
-  HslN (tap-hold-release-keys $tap-time $hold-time (multi ret @tap) rsft $right-hand-keys)
+  HmN  (tap-hold-release-keys $tap-time $hold-time (multi 0    @tap) lmet $right-hand-keys)
+  HcoN (tap-hold-release-keys $tap-time $hold-time (multi ,    @tap) lalt $right-hand-keys)
+  HdoN (tap-hold-release-keys $tap-time $hold-time (multi .    @tap) lctl $right-hand-keys)
+  HslN (tap-hold-release-keys $tap-time $hold-time (multi ret  @tap) rsft $right-hand-keys)
 
   ;; Vim nav mods (hrm2, rctl→cmd)
   HaV  (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
@@ -167,7 +171,7 @@ Key features:
 (deflayer base
   grv   1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab   q    w    e    r    t    y    u    i    o    p    [    ]    \
-  lmet  @Ha  @Hs  @Hd  @Hf  @Hg  @Hh  @Hj  @Hk  @Hl  @Hsc '    ret
+  lmet  @Ha  @Hs  @HdC @Hf  @Hg  @Hh  @Hj  @HkC @Hl  @Hsc '    ret
   lsft  @Hz  @Hx  @Hc  @Hv  b    n    @Hm  @Hco @Hdo @Hsl rsft
   lctl  lalt lmet           @spcNav        rmet @LsN
 )
