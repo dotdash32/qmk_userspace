@@ -1,59 +1,64 @@
 #include QMK_KEYBOARD_H
 
+
+#define INNER_PAIR 1, 2
+#define OUTER_LONE 0, 1
+#define OUTER_RONE 3, 1
 // --- Layer lighting (all 4 LEDs) ---
 
 const rgblight_segment_t PROGMEM rgb_base_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_BLUE}
+    {INNER_PAIR, HSV_BLUE}
 );
 
 const rgblight_segment_t PROGMEM rgb_nav_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_CYAN}
+    {INNER_PAIR, HSV_CYAN}
 );
 
 const rgblight_segment_t PROGMEM rgb_num_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_PURPLE}
+    {INNER_PAIR, HSV_PURPLE}
 );
 
 const rgblight_segment_t PROGMEM rgb_adjust_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_RED}
+    {INNER_PAIR, HSV_RED}
 );
 
 const rgblight_segment_t PROGMEM rgb_numpad_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_GREEN}
+    {INNER_PAIR, HSV_GREEN}
 );
 
 const rgblight_segment_t PROGMEM rgb_mouse_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_YELLOW}
+    {INNER_PAIR, HSV_YELLOW}
 );
 
 const rgblight_segment_t PROGMEM rgb_fkeys_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_ORANGE}
+    {INNER_PAIR, HSV_ORANGE}
 );
 
 // --- Modifier indicators (LEDs 0-1 left side, 2-3 right side) ---
 
 const rgblight_segment_t PROGMEM rgb_mod_shift[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 1, HSV_RED},
-    {3, 1, HSV_RED}
+    {OUTER_RONE, HSV_PINK},
+    {OUTER_LONE, HSV_PINK}
 );
 
 const rgblight_segment_t PROGMEM rgb_mod_ctrl[] = RGBLIGHT_LAYER_SEGMENTS(
-    {1, 1, HSV_GREEN},
-    {2, 1, HSV_GREEN}
+    {OUTER_RONE, HSV_CYAN},
+    {OUTER_LONE, HSV_CYAN}
 );
 
 const rgblight_segment_t PROGMEM rgb_mod_alt[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 1, HSV_MAGENTA},
-    {3, 1, HSV_MAGENTA}
+    {OUTER_RONE, HSV_GOLDENROD},
+    {OUTER_LONE, HSV_GOLDENROD}
 );
 
 const rgblight_segment_t PROGMEM rgb_mod_gui[] = RGBLIGHT_LAYER_SEGMENTS(
-    {1, 1, HSV_WHITE},
-    {2, 1, HSV_WHITE}
+    {OUTER_RONE, HSV_SPRINGGREEN},
+    {OUTER_LONE, HSV_SPRINGGREEN}
 );
 
 const rgblight_segment_t PROGMEM rgb_caps_word[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 4, HSV_CORAL}
+    {OUTER_RONE, HSV_CORAL},
+    {OUTER_LONE, HSV_CORAL}
 );
 
 enum rgb_layer_index {
@@ -89,13 +94,13 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
 
 void keyboard_post_init_user(void) {
     rgblight_layers = my_rgb_layers;
-    rgblight_set_layer_state(RGBL_BASE, true);
+    // rgblight_set_layer_state(RGBL_BASE, true);  // allow animations
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     state = update_tri_layer_state(state, 1, 4, 5);
 
-    rgblight_set_layer_state(RGBL_BASE, layer_state_cmp(state, 0));
+    // rgblight_set_layer_state(RGBL_BASE, layer_state_cmp(state, 0));
     rgblight_set_layer_state(RGBL_NAV, layer_state_cmp(state, 1));
     rgblight_set_layer_state(RGBL_NUM, layer_state_cmp(state, 2));
     rgblight_set_layer_state(RGBL_ADJUST, layer_state_cmp(state, 3));
