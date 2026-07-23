@@ -217,9 +217,9 @@ Key features:
 
 (deflayer vim-nav
   _    _    _    _    _    _    _    _    _     _     _     _    _    _
-  _    q    bspc del  esc  t    home pgdn pgup  end   _     _    _    _
+  _    q    bspc del  esc  C-spc home pgdn pgup  end   _     _    _    _
   _    @HaV @HsV @HdV @HfV @HgV @HhV @HjV @HkV  @HlV  @HscV ralt _
-  _    @HzV @HxV @HcV @HvV _    [    @HmV @HcoV @HdoV @HslV _
+  _    @HzV @HxV @HcV @HvV C-b  [    @HmV @HcoV @HdoV @HslV _
   _    _    _              _              _     _
 )
 
