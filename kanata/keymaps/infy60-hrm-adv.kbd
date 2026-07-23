@@ -11,6 +11,7 @@ Key features:
     Z(lsft), X(cmd), C(lalt), V(cmd)
     M(cmd), ,(lalt), .(cmd), /(rsft)
 - Layer tap on D/K (num layer) and Space (vim-nav layer)
+- D+F chord / J+K chord: shift + num layer (for shifted numbers/symbols)
 - Multiple function layers for navigation, numbers, symbols, and media
 |#
 
@@ -69,13 +70,19 @@ Key features:
   ;; compound/complicated chords
   HdExp (tap-hold $tap-time $hold-time d (layer-while-held num))
   HkExp (tap-hold $tap-time $hold-time k (layer-while-held num))
+  HfExp (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lsft $left-hand-keys)
+  HjExp  (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rsft $right-hand-keys)
 )
 
 (defchords
   num_toggle_pre 50
-  (d  ) @HdExp
-  (  k) @HkExp
-  (d k) (layer-toggle num)
+  (d      ) @HdExp
+  (  f    ) @HfExp
+  (    j  ) @HjExp
+  (      k) @HkExp
+  (d f    ) (multi lsft (layer-while-held num))
+  (    j k) (multi rsft (layer-while-held num))
+  (d    k ) (layer-toggle num)
 )
 
 (defchords
@@ -106,12 +113,12 @@ Key features:
   Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
   Hs (tap-hold-release-keys $tap-time $hold-time (multi s @tap) $cmd_mod $left-hand-keys)
   HdC (chord num_toggle_pre d)
-  Hf (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lsft $left-hand-keys)
+  HfC (chord num_toggle_pre f)
   Hg (tap-hold-release-keys $tap-time $hold-time (multi g @tap) lalt $left-hand-keys)
 
   ;; Right hand home row mods (hrm2, rctl→cmd)
   Hh  (tap-hold-release-keys $tap-time $hold-time (multi h @tap) lalt $right-hand-keys)
-  Hj  (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rsft $right-hand-keys)
+  HjC  (chord num_toggle_pre j)
   HkC  (chord num_toggle_pre k)
   Hl  (tap-hold-release-keys $tap-time $hold-time (multi l @tap) $cmd_mod $right-hand-keys)
   Hsc (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) ralt $right-hand-keys)
@@ -179,7 +186,7 @@ Key features:
 (deflayer base
   grv   1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab   q    w    e    r    t    y    u    i    o    p    [    ]    \
-  lmet  @Ha  @Hs  @HdC @Hf  @Hg  @Hh  @Hj  @HkC @Hl  @Hsc '    ret
+  lmet  @Ha  @Hs  @HdC @HfC @Hg  @Hh  @HjC @HkC @Hl  @Hsc '    ret
   lsft  @Hz  @Hx  @Hc  @Hv  b    n    @Hm  @Hco @Hdo @Hsl rsft
   lctl  lalt lmet           @spcNav        rmet @LsN
 )
