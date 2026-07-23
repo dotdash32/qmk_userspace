@@ -42,7 +42,7 @@
       "LT(2,KC_BSPC)",
       "TT(1)",
       "LT(1,KC_SPC)",
-      "RCTL_T(KC_ESC)"
+      "LT(6, KC_ESC)"
     ],
     // removing old nav layer, replacing w/ vim nav
     [ // vim nav , layer 1
@@ -60,8 +60,8 @@
       "RCTL_T(KC_S)",
       "LT(2,KC_D)",
       "LSFT_T(KC_F)",
-      "LALT_T(KC_TAB)",
-      "LALT_T(KC_LEFT)",
+      "KC_TAB",
+      "KC_LEFT",
       "RSFT_T(KC_DOWN)",
       "LT(2,KC_UP)",
       "RCTL_T(KC_RGHT)",
@@ -133,7 +133,7 @@
       "KC_NO",
       "KC_NO",
       "KC_VOLU",
-      "KC_NO",
+      "LGUI(KC_L)",
       "KC_NO",
       "KC_NO",
       "KC_NO",
@@ -150,10 +150,10 @@
       "KC_NO",
       "KC_NO",
       "KC_NO",
+      "KC_NO",
       "KC_MPRV",
       "KC_MNXT",
       "KC_MPLY",
-      "LGUI(KC_L)",
       // thumb keys
       "KC_TRNS",
       "KC_TRNS",
