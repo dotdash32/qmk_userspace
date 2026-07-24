@@ -138,28 +138,28 @@ Key features:
   spcNav (tap-hold $tap-time $hold-time spc (layer-while-held vim-nav))
 
   ;; Number layer home row mods (hrm2, rctl→cmd)
-  HaN  (tap-hold-release-keys $tap-time $hold-time (multi 1     @tap) ralt $left-hand-keys)
-  HsN  (tap-hold-release-keys $tap-time $hold-time (multi 2     @tap) $cmd_mod $left-hand-keys)
+  HaN  (tap-hold-release-keys $tap-time $hold-time 1    ralt $left-hand-keys)
+  HsN  (tap-hold-release-keys $tap-time $hold-time 2    $cmd_mod $left-hand-keys)
   ;; d is already layer-tap (num), acts as 3 on this layer
   HdN (chord num_toggle_on 3)
-  HfN  (tap-hold-release-keys $tap-time $hold-time (multi 4     @tap) lsft $left-hand-keys)
-  HgN  (tap-hold-release-keys $tap-time $hold-time (multi 5     @tap) lalt $left-hand-keys)
-  HhN  (tap-hold-release-keys $tap-time $hold-time (multi 6     @tap) lalt $right-hand-keys)
-  HjN  (tap-hold-release-keys $tap-time $hold-time (multi 7     @tap) rsft $right-hand-keys)
+  HfN  (tap-hold-release-keys $tap-time $hold-time 4    lsft $left-hand-keys)
+  HgN  (tap-hold-release-keys $tap-time $hold-time 5    lalt $left-hand-keys)
+  HhN  (tap-hold-release-keys $tap-time $hold-time 6    lalt $right-hand-keys)
+  HjN  (tap-hold-release-keys $tap-time $hold-time 7    rsft $right-hand-keys)
   ;; k is already layer-tap (num), acts as 8 on this layer
   HkN  (chord num_toggle_on 8)
-  HlN  (tap-hold-release-keys $tap-time $hold-time (multi 9     @tap) $cmd_mod $right-hand-keys)
-  HscN (tap-hold-release-keys $tap-time $hold-time (multi '     @tap) ralt $right-hand-keys)
+  HlN  (tap-hold-release-keys $tap-time $hold-time 9     $cmd_mod $right-hand-keys)
+  HscN (tap-hold-release-keys $tap-time $hold-time 0     ralt $right-hand-keys)
 
   ;; Number layer bottom row mods (hrm2, rctl→cmd)
-  HzN  (tap-hold-release-keys $tap-time $hold-time (multi grv   @tap) lsft $left-hand-keys)
-  HxN  (tap-hold-release-keys $tap-time $hold-time (multi cut   @tap) lctl $left-hand-keys)
-  HcN  (tap-hold-release-keys $tap-time $hold-time (multi copy  @tap) lalt $left-hand-keys)
-  HvN  (tap-hold-release-keys $tap-time $hold-time (multi pste  @tap) lmet $left-hand-keys)
-  HmN  (tap-hold-release-keys $tap-time $hold-time (multi 0     @tap) lmet $right-hand-keys)
-  HcoN (tap-hold-release-keys $tap-time $hold-time (multi ,     @tap) lalt $right-hand-keys)
-  HdoN (tap-hold-release-keys $tap-time $hold-time (multi .     @tap) lctl $right-hand-keys)
-  HslN (tap-hold-release-keys $tap-time $hold-time (multi ret   @tap) rsft $right-hand-keys)
+  HzN  (tap-hold-release-keys $tap-time $hold-time grv   lsft $left-hand-keys)
+  HxN  (tap-hold-release-keys $tap-time $hold-time cut   lctl $left-hand-keys)
+  HcN  (tap-hold-release-keys $tap-time $hold-time copy  lalt $left-hand-keys)
+  HvN  (tap-hold-release-keys $tap-time $hold-time pste  lmet $left-hand-keys)
+  HmN  (tap-hold-release-keys $tap-time $hold-time 0     lmet $right-hand-keys)
+  HcoN (tap-hold-release-keys $tap-time $hold-time ,     lalt $right-hand-keys)
+  HdoN (tap-hold-release-keys $tap-time $hold-time .     lctl $right-hand-keys)
+  HslN (tap-hold-release-keys $tap-time $hold-time ret   rsft $right-hand-keys)
 
   ;; Vim nav mods (hrm2, rctl→cmd)
   HaV  (tap-hold-release-keys $tap-time $hold-time (multi a     @tap) ralt $left-hand-keys)
@@ -209,7 +209,7 @@ Key features:
 
 (deflayer num
   _    _    _    _    _    _    _    _    _     _     _     _     _    _
-  _    q    bspc del  esc  @CAP _    -    =     \     grv   _     _    _
+  _    q    bspc del  esc  lrld _    -    =     \     grv   _     _    _
   _    @HaN @HsN @HdN @HfN @HgN @HhN @HjN @HkN  @HlN  @HscN @LapN _
   _    @HzN @HxN @HcN @HvN @CAP \    @HmN @HcoN @HdoN @HslN _
   _    _    _              _              _    _
