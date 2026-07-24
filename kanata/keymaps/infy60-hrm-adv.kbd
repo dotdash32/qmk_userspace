@@ -67,6 +67,12 @@ Key features:
 )
 
 (defalias
+  ;; Auto-disable mods on rapid typing
+  tap (multi
+    (layer-switch nomods)
+    (on-idle-fakekey to-base tap 20)
+  )
+
   ;; compound/complicated chords
   HdExp (tap-hold $tap-time $hold-time d (layer-while-held num))
   HkExp (tap-hold $tap-time $hold-time k (layer-while-held num))
@@ -82,23 +88,17 @@ Key features:
   (      k) @HkExp
   (d f    ) (multi lsft (layer-while-held num))
   (    j k) (multi rsft (layer-while-held num))
-  (d    k ) (layer-toggle num)
+  (d    k ) (layer-switch num)
 )
 
 (defchords
   num_toggle_on 50
   (3  ) 3
   (  8) 8
-  (3 8) (layer-toggle num)
+  (3 8) (layer-switch base) ;; return to base
 )
 
 (defalias
-  ;; Auto-disable mods on rapid typing
-  tap (multi
-    (layer-switch nomods)
-    (on-idle-fakekey to-base tap 20)
-  )
-
   CAP (caps-word 2000)
 
   ;; Grave escape (Esc normally, grave when shifted)
@@ -107,7 +107,7 @@ Key features:
   ;; Layer toggles and momentary
   LsN (layer-while-held simple-nav)
   Lmd (layer-while-held media)
-  LapN (layer-toggle num)
+  LapN (layer-switch num)
 
   ;; Left hand home row mods (hrm2, rctl→cmd)
   Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt $left-hand-keys)
