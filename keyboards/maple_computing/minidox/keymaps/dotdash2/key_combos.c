@@ -5,11 +5,10 @@ enum combos {
     L2_TG2_,
     QW_TAB_,
     WS_TAB_,
-    PUNC_TAB_, // comma-period, aka "punctuation"
-    DSLH_TERM,  // dot-slash, jump to terminal
-    ZX_GRV_,
+    DSLH_ENT_,
+    PUNC_TAB_,
+    ZX_TERM_,
     CV_UNDS,
-    // replacement parens, less common bi-grams
     UJ_LPRN,
     IK_RPRN,
     OL_MINS,
@@ -19,6 +18,8 @@ enum combos {
     QET_OSL3,
     YIP_OSL3,
     TG_WBAK,
+    PQOT_COLN,
+    ED_COLN,
 };
 
 const uint16_t PROGMEM uj_combo[] = {KC_U, RSFT_T(KC_J), COMBO_END};
@@ -38,6 +39,8 @@ const uint16_t PROGMEM yiop_combo[] = {KC_Y, KC_I, KC_O, KC_P, COMBO_END};
 const uint16_t PROGMEM qet_combo[] = {KC_Q, KC_E, KC_T, COMBO_END};
 const uint16_t PROGMEM yip_combo[] = {KC_Y, KC_I, KC_P, COMBO_END};
 const uint16_t PROGMEM tg_combo[] = {KC_T, LALT_T(KC_G), COMBO_END};
+const uint16_t PROGMEM pqot_combo[] = {KC_P, RALT_T(KC_QUOT), COMBO_END};
+const uint16_t PROGMEM ed_combo[] = {KC_E, LT(2, KC_D), COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -48,9 +51,9 @@ combo_t key_combos[] = {
     [L2_TG2_] = COMBO(dk_combo, TG(2)),
     [QW_TAB_] = COMBO(qw_combo, KC_TAB),
     [WS_TAB_] = COMBO(ws_combo, KC_TAB),
+    [DSLH_ENT_] = COMBO(dslh_combo, KC_ENT),
     [PUNC_TAB_] = COMBO(punc_combo, KC_TAB),
-    [DSLH_TERM] = COMBO(dslh_combo, LCTL(KC_GRV)),
-    [ZX_GRV_] = COMBO(zx_combo, KC_GRV),
+    [ZX_TERM_] = COMBO(zx_combo, LCTL(KC_GRV)),
     [CV_UNDS] = COMBO(cv_combo, KC_UNDS),
     [FJ_OSS_] = COMBO(fj_combo, OSM(MOD_LSFT)),
     [QWET_BOOT] = COMBO(qwet_combo, QK_BOOT),
@@ -58,6 +61,8 @@ combo_t key_combos[] = {
     [QET_OSL3] = COMBO(qet_combo, OSL(3)),
     [YIP_OSL3] = COMBO(yip_combo, OSL(3)),
     [TG_WBAK] = COMBO(tg_combo, KC_WBAK),
+    [PQOT_COLN] = COMBO(pqot_combo, KC_COLN),
+    [ED_COLN] = COMBO(ed_combo, KC_COLN),
 };
 
 #ifdef COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
@@ -66,5 +71,6 @@ const custom_shift_key_t custom_shift_keys[] = {
     {LT(1,KC_SPC), KC_UNDS},  // Shift Space is _
     {KC_SPC, KC_UNDS},         // Shift Space is _
     {RALT_T(KC_0), KC_COLN},   // Shift 0 → :
+    {KC_COLN, KC_SCLN},        // Shift P+' combo → ;
 };
 #endif
