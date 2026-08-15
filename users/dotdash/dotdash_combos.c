@@ -1,4 +1,4 @@
-#include QMK_KEYBOARD_H
+#include "dotdash.h"
 
 enum combos {
     DK_TG2_,
@@ -23,10 +23,10 @@ enum combos {
 };
 
 const uint16_t PROGMEM uj_combo[] = {KC_U, RSFT_T(KC_J), COMBO_END};
-const uint16_t PROGMEM ik_combo[] = {KC_I, LT(2,KC_K), COMBO_END};
+const uint16_t PROGMEM ik_combo[] = {KC_I, LT(_NUM,KC_K), COMBO_END};
 const uint16_t PROGMEM ol_combo[] = {KC_O, RCTL_T(KC_L), COMBO_END};
-const uint16_t PROGMEM dk_combo[] = {LT(2,KC_D), LT(2,KC_K), COMBO_END};
-const uint16_t PROGMEM L2_combo[] = {LT(2,KC_3), LT(2,KC_8), COMBO_END};  // return from L2
+const uint16_t PROGMEM dk_combo[] = {LT(_NUM,KC_D), LT(_NUM,KC_K), COMBO_END};
+const uint16_t PROGMEM L2_combo[] = {LT(_NUM,KC_3), LT(_NUM,KC_8), COMBO_END};  // return from L2
 const uint16_t PROGMEM qw_combo[] = {KC_Q, KC_W, COMBO_END};
 const uint16_t PROGMEM ws_combo[] = {KC_W, RCTL_T(KC_S), COMBO_END};
 const uint16_t PROGMEM punc_combo[] = {LALT_T(KC_COMM), LCTL_T(KC_DOT), COMBO_END};
@@ -47,8 +47,8 @@ combo_t key_combos[] = {
     [UJ_LPRN] = COMBO(uj_combo, KC_LPRN),
     [IK_RPRN] = COMBO(ik_combo, KC_RPRN),
     [OL_MINS] = COMBO(ol_combo, KC_MINS),
-    [DK_TG2_] = COMBO(dk_combo, TG(2)),
-    [L2_TG2_] = COMBO(dk_combo, TG(2)),
+    [DK_TG2_] = COMBO(dk_combo, TG(_NUM)),
+    [L2_TG2_] = COMBO(dk_combo, TG(_NUM)),
     [QW_TAB_] = COMBO(qw_combo, KC_TAB),
     [WS_TAB_] = COMBO(ws_combo, KC_TAB),
     [DSLH_ENT_] = COMBO(dslh_combo, KC_ENT),
@@ -58,8 +58,8 @@ combo_t key_combos[] = {
     [FJ_OSS_] = COMBO(fj_combo, OSM(MOD_LSFT)),
     [QWET_BOOT] = COMBO(qwet_combo, QK_BOOT),
     [YIOP_BOOT] = COMBO(yiop_combo, QK_BOOT),
-    [QET_OSL3] = COMBO(qet_combo, OSL(3)),
-    [YIP_OSL3] = COMBO(yip_combo, OSL(3)),
+    [QET_OSL3] = COMBO(qet_combo, OSL(_SYS)),
+    [YIP_OSL3] = COMBO(yip_combo, OSL(_SYS)),
     [TG_WBAK] = COMBO(tg_combo, KC_WBAK),
     [PQOT_COLN] = COMBO(pqot_combo, KC_COLN),
     [ED_COLN] = COMBO(ed_combo, KC_COLN),
@@ -68,7 +68,7 @@ combo_t key_combos[] = {
 #ifdef COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
 #include "modules/getreuer/custom_shift_keys/custom_shift_keys.h"
 const custom_shift_key_t custom_shift_keys[] = {
-    {LT(1,KC_SPC), KC_UNDS},  // Shift Space is _
+    {LT(_NAV,KC_SPC), KC_UNDS},  // Shift Space is _
     {KC_SPC, KC_UNDS},         // Shift Space is _
     {RALT_T(KC_0), KC_COLN},   // Shift 0 → :
     {KC_COLN, KC_SCLN},        // Shift P+' combo → ;

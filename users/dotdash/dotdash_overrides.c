@@ -1,13 +1,5 @@
-#include QMK_KEYBOARD_H
+#include "dotdash.h"
 #include "print.h"
-
-/* Note on defined keys:
- ** QK_USER_0: paste code block (``` paste ```)
- ** QK_USER_1: Layer word for numbers (L2)
- ** QK_USER_2: layer word for numpad (L4)
- ** QK_USER_3: layer word for numpad (L4) && Swap hands (cad num entry)
- ** QK_USER_4: nav layer word?? (todo)
-*/
 
 bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *remembered_mods) {
     switch (keycode) {
@@ -19,14 +11,14 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(4, KC_S):
+        case LT(_NUMPAD, KC_S):
             if (record->tap.count && record->event.pressed) {
                 set_oneshot_mods(MOD_BIT(KC_LSFT));
                 return false;
             }
             return true;
-        case QK_USER_0:
-        case LCTL_T(QK_USER_0):
+        case DD_CODEBLK:
+        case LCTL_T(DD_CODEBLK):
             if (record->event.pressed) {
                 SEND_STRING(SS_LSFT(SS_TAP(X_ENT)) SS_DELAY(100));
                 SEND_STRING("```" SS_LSFT(SS_TAP(X_ENT)) SS_DELAY(100));
@@ -106,7 +98,7 @@ uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_
             is_shift_mt = true;
             term = FLOW_TAP_TERM_FAST;
             break;
-        case LT(1, KC_SPC):
+        case LT(_NAV, KC_SPC):
             term = FLOW_TAP_TERM_FAST;
             break;
         default:
@@ -114,7 +106,7 @@ uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_
             break;
     }
 
-    if (is_shift_mt && prev_keycode == LT(1, KC_SPC)) {
+    if (is_shift_mt && prev_keycode == LT(_NAV, KC_SPC)) {
         return 0;
     }
     return term;
@@ -124,15 +116,15 @@ uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_
 // Layer Word callbacks
 uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
     switch (keycode) {
-        case QK_USER_1:
-            return 2;
-        case QK_USER_2:
-            return 4;
-        case QK_USER_3:  // numpad layer & swap hands
-        case LSFT_T(QK_USER_3):
+        case DD_LWRD_NUM:
+            return _NUM;
+        case DD_LWRD_PAD:
+            return _NUMPAD;
+        case DD_LWRD_PAD_SWAP:
+        case LSFT_T(DD_LWRD_PAD_SWAP):
             dprintf("numpad SWAP hands ON");
             swap_hands_on();
-            return 4;
+            return _NUMPAD;
         default:
             return 0;
     }
@@ -140,7 +132,7 @@ uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
 
 bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *record) {
     switch (layer) {
-        case 2:
+        case _NUM:
             switch (keycode) {
                 case KC_1 ... KC_0:
                 case KC_MINS:
@@ -156,7 +148,7 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
                 default:
                     return false;
             }
-        case 4:
+        case _NUMPAD:
             switch(keycode) {
                 case KC_A ... KC_F: // support hex entry
                 case KC_1 ... KC_0:
@@ -181,6 +173,6 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    state = update_tri_layer_state(state, 1, 4, 5);
+    state = update_tri_layer_state(state, _NAV, _NUMPAD, _MOUSE);
     return state;
 }
