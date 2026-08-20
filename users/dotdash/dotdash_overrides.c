@@ -122,8 +122,10 @@ uint8_t get_layerword_layer_from_trigger(uint16_t keycode) {
             return _NUMPAD;
         case DD_LWRD_PAD_SWAP:
         case LSFT_T(DD_LWRD_PAD_SWAP):
+#ifdef SWAP_HANDS_ENABLE
             dprintf("numpad SWAP hands ON");
             swap_hands_on();
+#endif
             return _NUMPAD;
         default:
             return 0;
@@ -164,8 +166,10 @@ bool should_continue_layerword(uint8_t layer, uint16_t keycode, keyrecord_t *rec
                 case KC_TAB: // spreadsheet mode
                 return true;
                 default:
-                    dprintf("numpad SWAP hands OFF, %d / %s", keycode, keycode);
+#ifdef SWAP_HANDS_ENABLE
+                    dprintf("numpad SWAP hands OFF, %d / %d", keycode, keycode);
                     swap_hands_off();
+#endif
                     return false;
             }
         }

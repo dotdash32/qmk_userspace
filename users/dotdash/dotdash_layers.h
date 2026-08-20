@@ -138,6 +138,6 @@
 #define DD_L6_THM_L  KC_TRNS, KC_TRNS, KC_TRNS
 #define DD_L6_THM_R  KC_TRNS, KC_TRNS, KC_TRNS
 
-// Variadic wrapper to force row macro expansion before LAYOUT counts args
-#define DD_LAYOUT(...) LAYOUT_split_3x5_3(__VA_ARGS__)
+// Generic expansion macro — forces row macros to expand before the layout counts args
+#define DD_APPLY(layout, ...) layout(__VA_ARGS__)
 
