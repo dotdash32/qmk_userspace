@@ -1,7 +1,5 @@
 #pragma once
 
-#include "dotdash.h"
-
 // ============================================================
 // Layer 0 - Base (QWERTY + home row mods)
 // ============================================================
@@ -103,7 +101,7 @@
 #define DD_L4_HRM_R  KC_DOT, KC_4, KC_5, KC_6, KC_0
 
 #define DD_L4_BOT_L  LSFT_T(DD_LWRD_PAD_SWAP), DD_X, DD_C, LGUI_T(KC_G), KC_B
-#define DD_L4_BOT_R  KC_COM, KC_1, KC_2, KC_3, KC_ENT
+#define DD_L4_BOT_R  KC_COMM, KC_1, KC_2, KC_3, KC_ENT
 
 #define DD_L4_THM_L  SH_OS, KC_TRNS, KC_TRNS
 #define DD_L4_THM_R  KC_TRNS, KC_TRNS, KC_TRNS
@@ -140,14 +138,6 @@
 #define DD_L6_THM_L  KC_TRNS, KC_TRNS, KC_TRNS
 #define DD_L6_THM_R  KC_TRNS, KC_TRNS, KC_TRNS
 
-// ============================================================
-// Full-layer convenience macros (for 3x5+3 layouts)
-// ============================================================
+// Variadic wrapper to force row macro expansion before LAYOUT counts args
+#define DD_LAYOUT(...) LAYOUT_split_3x5_3(__VA_ARGS__)
 
-#define DD_LAYER_0  DD_L0_TOP_L, DD_L0_TOP_R, DD_L0_HRM_L, DD_L0_HRM_R, DD_L0_BOT_L, DD_L0_BOT_R, DD_L0_THM_L, DD_L0_THM_R
-#define DD_LAYER_1  DD_L1_TOP_L, DD_L1_TOP_R, DD_L1_HRM_L, DD_L1_HRM_R, DD_L1_BOT_L, DD_L1_BOT_R, DD_L1_THM_L, DD_L1_THM_R
-#define DD_LAYER_2  DD_L2_TOP_L, DD_L2_TOP_R, DD_L2_HRM_L, DD_L2_HRM_R, DD_L2_BOT_L, DD_L2_BOT_R, DD_L2_THM_L, DD_L2_THM_R
-#define DD_LAYER_3  DD_L3_TOP_L, DD_L3_TOP_R, DD_L3_HRM_L, DD_L3_HRM_R, DD_L3_BOT_L, DD_L3_BOT_R, DD_L3_THM_L, DD_L3_THM_R
-#define DD_LAYER_4  DD_L4_TOP_L, DD_L4_TOP_R, DD_L4_HRM_L, DD_L4_HRM_R, DD_L4_BOT_L, DD_L4_BOT_R, DD_L4_THM_L, DD_L4_THM_R
-#define DD_LAYER_5  DD_L5_TOP_L, DD_L5_TOP_R, DD_L5_HRM_L, DD_L5_HRM_R, DD_L5_BOT_L, DD_L5_BOT_R, DD_L5_THM_L, DD_L5_THM_R
-#define DD_LAYER_6  DD_L6_TOP_L, DD_L6_TOP_R, DD_L6_HRM_L, DD_L6_HRM_R, DD_L6_BOT_L, DD_L6_BOT_R, DD_L6_THM_L, DD_L6_THM_R

@@ -18,3 +18,5 @@ enum dotdash_keycodes {
     DD_LWRD_PAD,              // layer word: numpad layer (_NUMPAD)
     DD_LWRD_PAD_SWAP,         // layer word: numpad + swap hands (CAD entry)
 };
+
+#include "users/dotdash/dotdash_layers.h"
