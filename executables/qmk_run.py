@@ -46,18 +46,28 @@ def resolve_keymap_dir(keyboard, keymap):
     return None
 
 
+def short_keyboard(keyboard):
+    """Extract the meaningful board name, skipping revision suffixes."""
+    parts = keyboard.split("/")
+    if len(parts) < 2:
+        return keyboard
+    if parts[0] == "handwired":
+        return parts[-1]
+    return parts[-2]
+
+
 def display_targets(targets):
     print("\nAvailable keymaps:")
     print("-" * 50)
     for i, (kb, km) in enumerate(targets, 1):
-        short_kb = kb.split("/")[-2] if "/" in kb else kb
+        short_kb = short_keyboard(kb)
         print(f"  {i}) {short_kb}/{km}  [{kb}]")
     print()
 
 
 def fuzzy_score(query, keyboard, keymap):
     query = query.lower()
-    short_kb = keyboard.split("/")[-2] if "/" in keyboard else keyboard
+    short_kb = short_keyboard(keyboard)
     candidates = [
         keymap.lower(),
         short_kb.lower(),
@@ -99,7 +109,7 @@ def pick_target(targets, selector=None):
         print(f"No match found for '{selector}'", file=sys.stderr)
         sys.exit(1)
 
-    short_kb = best_kb.split("/")[-2] if "/" in best_kb else best_kb
+    short_kb = short_keyboard(best_kb)
     label = f"{short_kb}/{best_km}"
 
     if best_score < 0.8:
