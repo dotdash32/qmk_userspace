@@ -4,6 +4,7 @@
         ["input_club/infinity60/rev1", "dotdash_hrm1"],
         ["maple_computing/minidox/rev1", "dotdash_c1"],
         ["handwired/planck", "dotdash1"],
-        ["handwired/gayley_scientific/36_plus_12", "dotdash1"]
+        ["handwired/gayley_scientific/36_plus_12", "dotdash1"],
+        ["handwired/gayley_scientific/cameldox38", "dotdash_c1"]
     ]
 }
