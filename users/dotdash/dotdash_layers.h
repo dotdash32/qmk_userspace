@@ -6,17 +6,39 @@
 // Layer 0 - Base (QWERTY + home row mods)
 // ============================================================
 
+// Individual home row mod keys (for use in combos & overrides)
+#define DD_A  RALT_T(KC_A)
+#define DD_S  RCTL_T(KC_S)
+#define DD_D  LT(_NUM,KC_D)
+#define DD_F  LSFT_T(KC_F)
+#define DD_G  LALT_T(KC_G)
+#define DD_H  LALT_T(KC_H)
+#define DD_J  RSFT_T(KC_J)
+#define DD_K  LT(_NUM,KC_K)
+#define DD_L  RCTL_T(KC_L)
+#define DD_QUOT  RALT_T(KC_QUOT)
+
+// Individual bottom row mod keys
+#define DD_Z  LSFT_T(KC_Z)
+#define DD_X  LCTL_T(KC_X)
+#define DD_C  LALT_T(KC_C)
+#define DD_V  LGUI_T(KC_V)
+#define DD_M  LGUI_T(KC_M)
+#define DD_COMM  LALT_T(KC_COMM)
+#define DD_DOT  LCTL_T(KC_DOT)
+#define DD_SLSH  RSFT_T(KC_SLSH)
+
 // Top row
 #define DD_L0_TOP_L  KC_Q, KC_W, KC_E, KC_R, KC_T
 #define DD_L0_TOP_R  KC_Y, KC_U, KC_I, KC_O, KC_P
 
 // Home row (with home row mods)
-#define DD_L0_HRM_L  RALT_T(KC_A), RCTL_T(KC_S), LT(_NUM,KC_D), LSFT_T(KC_F), LALT_T(KC_G)
-#define DD_L0_HRM_R  LALT_T(KC_H), RSFT_T(KC_J), LT(_NUM,KC_K), RCTL_T(KC_L), RALT_T(KC_QUOT)
+#define DD_L0_HRM_L  DD_A, DD_S, DD_D, DD_F, DD_G
+#define DD_L0_HRM_R  DD_H, DD_J, DD_K, DD_L, DD_QUOT
 
 // Bottom row
-#define DD_L0_BOT_L  LSFT_T(KC_Z), LCTL_T(KC_X), LALT_T(KC_C), LGUI_T(KC_V), KC_B
-#define DD_L0_BOT_R  KC_N, LGUI_T(KC_M), LALT_T(KC_COMM), LCTL_T(KC_DOT), RSFT_T(KC_SLSH)
+#define DD_L0_BOT_L  DD_Z, DD_X, DD_C, DD_V, KC_B
+#define DD_L0_BOT_R  KC_N, DD_M, DD_COMM, DD_DOT, DD_SLSH
 
 // Thumbs
 #define DD_L0_THM_L  SH_OS, LT(_NUMPAD,KC_S), LT(_NUM,KC_BSPC)
@@ -29,11 +51,11 @@
 #define DD_L1_TOP_L  KC_Q, KC_BSPC, KC_DEL, KC_ESC, LCTL(KC_SPC)
 #define DD_L1_TOP_R  KC_HOME, KC_PGDN, KC_PGUP, KC_END, KC_BSPC
 
-#define DD_L1_HRM_L  RALT_T(KC_A), RCTL_T(KC_S), LT(_NUM,KC_D), LSFT_T(KC_F), KC_TAB
+#define DD_L1_HRM_L  DD_A, DD_S, DD_D, DD_F, KC_TAB
 #define DD_L1_HRM_R  KC_LEFT, RSFT_T(KC_DOWN), LT(_NUM,KC_UP), RCTL_T(KC_RGHT), RALT_T(KC_SCLN)
 
-#define DD_L1_BOT_L  LSFT_T(KC_Z), LCTL_T(KC_X), LALT_T(KC_C), LGUI_T(KC_V), LCTL(KC_B)
-#define DD_L1_BOT_R  KC_LBRC, LGUI_T(KC_SPC), LALT_T(KC_RBRC), LCTL_T(KC_DOT), RSFT_T(KC_ENT)
+#define DD_L1_BOT_L  DD_Z, DD_X, DD_C, DD_V, LCTL(KC_B)
+#define DD_L1_BOT_R  KC_LBRC, LGUI_T(KC_SPC), LALT_T(KC_RBRC), DD_DOT, RSFT_T(KC_ENT)
 
 #define DD_L1_THM_L  KC_TRNS, KC_TRNS, KC_TRNS
 #define DD_L1_THM_R  KC_TRNS, KC_TRNS, KC_TRNS
@@ -49,7 +71,7 @@
 #define DD_L2_HRM_R  LALT_T(KC_6), RSFT_T(KC_7), LT(_NUM,KC_8), RCTL_T(KC_9), RALT_T(KC_0)
 
 #define DD_L2_BOT_L  LSFT_T(KC_GRV), LCTL_T(DD_CODEBLK), LALT_T(KC_COPY), LGUI_T(KC_PSTE), CW_TOGG
-#define DD_L2_BOT_R  KC_BSLS, LGUI_T(KC_0), LALT_T(KC_SLSH), LCTL_T(KC_DOT), RSFT_T(KC_ENT)
+#define DD_L2_BOT_R  KC_BSLS, LGUI_T(KC_0), LALT_T(KC_SLSH), DD_DOT, RSFT_T(KC_ENT)
 
 #define DD_L2_THM_L  KC_TRNS, KC_TRNS, KC_TRNS
 #define DD_L2_THM_R  KC_TRNS, KC_TRNS, KC_TRNS
@@ -78,10 +100,10 @@
 #define DD_L4_TOP_R  KC_SLSH, KC_7, KC_8, KC_9, KC_BSPC
 
 #define DD_L4_HRM_L  RALT_T(KC_A), RCTL_T(KC_DOT), LT(_NUM,KC_D), LSFT_T(KC_F), LALT_T(KC_E)
-#define DD_L4_HRM_R  KC_DOT, KC_4, KC_5, KC_6, KC_TAB
+#define DD_L4_HRM_R  KC_DOT, KC_4, KC_5, KC_6, KC_0
 
-#define DD_L4_BOT_L  LSFT_T(DD_LWRD_PAD_SWAP), LCTL_T(KC_X), LALT_T(KC_C), LGUI_T(KC_G), KC_B
-#define DD_L4_BOT_R  KC_0, KC_1, KC_2, KC_3, KC_ENT
+#define DD_L4_BOT_L  LSFT_T(DD_LWRD_PAD_SWAP), DD_X, DD_C, LGUI_T(KC_G), KC_B
+#define DD_L4_BOT_R  KC_COM, KC_1, KC_2, KC_3, KC_ENT
 
 #define DD_L4_THM_L  SH_OS, KC_TRNS, KC_TRNS
 #define DD_L4_THM_R  KC_TRNS, KC_TRNS, KC_TRNS
@@ -113,7 +135,7 @@
 #define DD_L6_HRM_R  LALT_T(KC_F6), RSFT_T(KC_F7), LT(_NUM,KC_F8), RCTL_T(KC_F9), RALT_T(KC_F10)
 
 #define DD_L6_BOT_L  LSFT_T(KC_GRV), LCTL_T(DD_CODEBLK), LALT_T(KC_COPY), LGUI_T(KC_PSTE), CW_TOGG
-#define DD_L6_BOT_R  KC_BSLS, LGUI_T(KC_0), LALT_T(KC_COMM), LCTL_T(KC_DOT), RSFT_T(KC_ENT)
+#define DD_L6_BOT_R  KC_BSLS, LGUI_T(KC_0), DD_COMM, DD_DOT, RSFT_T(KC_ENT)
 
 #define DD_L6_THM_L  KC_TRNS, KC_TRNS, KC_TRNS
 #define DD_L6_THM_R  KC_TRNS, KC_TRNS, KC_TRNS

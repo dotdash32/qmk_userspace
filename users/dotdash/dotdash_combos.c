@@ -22,25 +22,25 @@ enum combos {
     ED_COLN,
 };
 
-const uint16_t PROGMEM uj_combo[] = {KC_U, RSFT_T(KC_J), COMBO_END};
-const uint16_t PROGMEM ik_combo[] = {KC_I, LT(_NUM,KC_K), COMBO_END};
-const uint16_t PROGMEM ol_combo[] = {KC_O, RCTL_T(KC_L), COMBO_END};
-const uint16_t PROGMEM dk_combo[] = {LT(_NUM,KC_D), LT(_NUM,KC_K), COMBO_END};
+const uint16_t PROGMEM uj_combo[] = {KC_U, DD_J, COMBO_END};
+const uint16_t PROGMEM ik_combo[] = {KC_I, DD_K, COMBO_END};
+const uint16_t PROGMEM ol_combo[] = {KC_O, DD_L, COMBO_END};
+const uint16_t PROGMEM dk_combo[] = {DD_D, DD_K, COMBO_END};
 const uint16_t PROGMEM L2_combo[] = {LT(_NUM,KC_3), LT(_NUM,KC_8), COMBO_END};  // return from L2
 const uint16_t PROGMEM qw_combo[] = {KC_Q, KC_W, COMBO_END};
-const uint16_t PROGMEM ws_combo[] = {KC_W, RCTL_T(KC_S), COMBO_END};
-const uint16_t PROGMEM punc_combo[] = {LALT_T(KC_COMM), LCTL_T(KC_DOT), COMBO_END};
-const uint16_t PROGMEM dslh_combo[] = {LCTL_T(KC_DOT), RSFT_T(KC_SLSH), COMBO_END};
-const uint16_t PROGMEM zx_combo[] = {LSFT_T(KC_Z), LCTL_T(KC_X), COMBO_END};
-const uint16_t PROGMEM cv_combo[] = {LALT_T(KC_C), LGUI_T(KC_V), COMBO_END};
-const uint16_t PROGMEM fj_combo[] = {LSFT_T(KC_F), RSFT_T(KC_J), COMBO_END};
+const uint16_t PROGMEM ws_combo[] = {KC_W, DD_S, COMBO_END};
+const uint16_t PROGMEM punc_combo[] = {DD_COMM, DD_DOT, COMBO_END};
+const uint16_t PROGMEM dslh_combo[] = {DD_DOT, DD_SLSH, COMBO_END};
+const uint16_t PROGMEM zx_combo[] = {DD_Z, DD_X, COMBO_END};
+const uint16_t PROGMEM cv_combo[] = {DD_C, DD_V, COMBO_END};
+const uint16_t PROGMEM fj_combo[] = {DD_F, DD_J, COMBO_END};
 const uint16_t PROGMEM qwet_combo[] = {KC_Q, KC_W, KC_E, KC_T, COMBO_END};
 const uint16_t PROGMEM yiop_combo[] = {KC_Y, KC_I, KC_O, KC_P, COMBO_END};
 const uint16_t PROGMEM qet_combo[] = {KC_Q, KC_E, KC_T, COMBO_END};
 const uint16_t PROGMEM yip_combo[] = {KC_Y, KC_I, KC_P, COMBO_END};
-const uint16_t PROGMEM tg_combo[] = {KC_T, LALT_T(KC_G), COMBO_END};
-const uint16_t PROGMEM pqot_combo[] = {KC_P, RALT_T(KC_QUOT), COMBO_END};
-const uint16_t PROGMEM ed_combo[] = {KC_E, LT(2, KC_D), COMBO_END};
+const uint16_t PROGMEM tg_combo[] = {KC_T, DD_G, COMBO_END};
+const uint16_t PROGMEM pqot_combo[] = {KC_P, DD_QUOT, COMBO_END};
+const uint16_t PROGMEM ed_combo[] = {KC_E, DD_D, COMBO_END};
 
 
 combo_t key_combos[] = {
@@ -69,8 +69,8 @@ combo_t key_combos[] = {
 #include "modules/getreuer/custom_shift_keys/custom_shift_keys.h"
 const custom_shift_key_t custom_shift_keys[] = {
     {LT(_NAV,KC_SPC), KC_UNDS},  // Shift Space is _
-    {KC_SPC, KC_UNDS},         // Shift Space is _
-    {RALT_T(KC_0), KC_COLN},   // Shift 0 → :
-    {KC_COLN, KC_SCLN},        // Shift P+' combo → ;
+    {KC_SPC, KC_UNDS},           // Shift Space is _
+    {RALT_T(KC_0), KC_COLN},     // Shift 0 -> :
+    {KC_COLN, KC_SCLN},          // Shift P+' combo -> ;
 };
 #endif
