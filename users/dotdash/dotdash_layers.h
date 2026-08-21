@@ -26,6 +26,16 @@
 #define DD_DOT  LCTL_T(KC_DOT)
 #define DD_SLSH  RSFT_T(KC_SLSH)
 
+// individual thumb keys
+#define DD_LTB_INN0 SH_OS
+#define DD_LTB_PRIM LT(_NUMPAD,KC_S)
+#define DD_LTB_SECD LT(_NUM,KC_BSPC)
+#define DD_LTB_OUT0 KC_LGUI
+#define DD_RTB_OUT0 KC_LCTL
+#define DD_RTB_SECD TT(_NAV)
+#define DD_RTB_PRIM LT(_NAV, KC_SPC)
+#define DD_RTB_INN0 LT(_FN,KC_ESC)
+
 // Top row
 #define DD_L0_TOP_L  KC_Q, KC_W, KC_E, KC_R, KC_T
 #define DD_L0_TOP_R  KC_Y, KC_U, KC_I, KC_O, KC_P
@@ -39,9 +49,8 @@
 #define DD_L0_BOT_R  KC_N, DD_M, DD_COMM, DD_DOT, DD_SLSH
 
 // Thumbs
-#define DD_L0_THM_L  SH_OS, LT(_NUMPAD,KC_S), LT(_NUM,KC_BSPC)
-#define DD_L0_THM_R  TT(_NAV), LT(_NAV,KC_SPC), LT(_FN, KC_ESC)
-
+#define DD_L0_THM_L  DD_LTB_INN0, DD_LTB_PRIM, DD_LTB_SECD
+#define DD_L0_THM_R  DD_LTR_INN0, DD_LTR_PRIM, DD_LTR_SECD
 // ============================================================
 // Layer 1 - Nav
 // ============================================================

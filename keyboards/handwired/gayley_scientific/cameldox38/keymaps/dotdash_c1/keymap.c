@@ -13,7 +13,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         DD_L0_TOP_L, DD_L0_TOP_R,
         DD_L0_HRM_L, DD_L0_HRM_R,
         DD_L0_BOT_L, DD_L0_BOT_R,
-        DD_C38_THM_L0, DD_C38_THM_R0
+        DD_LTB_INN0, DD_LTB_PRIM, DD_LTB_SECD, DD_LTB_OUT0, DD_RTB_OUT0, DD_RTB_SECD, DD_RTB_PRIM, DD_RTB_INN0
     ),
     [_NAV] = DD_APPLY(LAYOUT_ortho_3x10_8,
         DD_L1_TOP_L, DD_L1_TOP_R,
