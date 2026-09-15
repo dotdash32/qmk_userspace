@@ -12,6 +12,8 @@ enum combos {
     IK_RPRN,
     JM_LBRC,
     KCOM_RBRC,
+    UJN_LBRC,
+    IKN_RBRC,
     OL_MINS,
     QWET_BOOT,
     YIOP_BOOT,
@@ -27,6 +29,8 @@ const uint16_t PROGMEM uj_combo[] = {KC_U, DD_J, COMBO_END};
 const uint16_t PROGMEM ik_combo[] = {KC_I, DD_K, COMBO_END};
 const uint16_t PROGMEM jm_combo[] = {DD_J, DD_M, COMBO_END};
 const uint16_t PROGMEM kcom_combo[] = {DD_K, DD_COMM, COMBO_END};
+const uint16_t PROGMEM ujn_combo[] = {KC_MINS, DD_7, COMBO_END};
+const uint16_t PROGMEM ikn_combo[] = {KC_EQL, DD_8, COMBO_END};
 const uint16_t PROGMEM ol_combo[] = {KC_O, DD_L, COMBO_END};
 const uint16_t PROGMEM dk_combo[] = {DD_D, DD_K, COMBO_END};
 const uint16_t PROGMEM L2_combo[] = {DD_3, DD_8, COMBO_END};  // return from L2
@@ -50,6 +54,8 @@ combo_t key_combos[] = {
     [IK_RPRN] = COMBO(ik_combo, KC_RPRN),
     [JM_LBRC] = COMBO(jm_combo, KC_LBRC),
     [KCOM_RBRC] = COMBO(kcom_combo, KC_RBRC),
+    [UJN_LBRC] = COMBO(ujn_combo, KC_LBRC),
+    [IKN_RBRC] = COMBO(ikn_combo, KC_RBRC),
     [OL_MINS] = COMBO(ol_combo, KC_MINS),
     [DK_TG2_] = COMBO(dk_combo, TG(_NUM)),
     [L2_TG2_] = COMBO(dk_combo, TG(_NUM)),
@@ -63,7 +69,7 @@ combo_t key_combos[] = {
     [QET_OSL3] = COMBO(qet_combo, OSL(_SYS)),
     [YIP_OSL3] = COMBO(yip_combo, OSL(_SYS)),
     [TG_WBAK] = COMBO(tg_combo, KC_WBAK),
-    [PQOT_COLN] = COMBO(pqot_combo, KC_COLN),
+    [PQOT_COLN] = COMBO(pqot_combo, KC_SCLN),
     [ED_EQL] = COMBO(ed_combo, KC_EQL),
     [RF_COLN] = COMBO(rf_combo, KC_COLN),
 };
@@ -73,7 +79,10 @@ combo_t key_combos[] = {
 const custom_shift_key_t custom_shift_keys[] = {
     {LT(_NAV,KC_SPC), KC_UNDS},  // Shift Space is _
     {KC_SPC, KC_UNDS},           // Shift Space is _
-    {RALT_T(KC_0), KC_COLN},     // Shift 0 -> :
+    {DD_0, KC_COLN},             // Shift 0 -> :
+    {DD_9, KC_SCLN},             // Shift 9 -> :
     {KC_COLN, KC_SCLN},          // Shift P+' combo -> ;
+    {KC_LPRN, KC_LBRC},          // Shift ( -> [ (L0 combo)
+    {KC_RPRN, KC_RBRC},          // Shift ) -> ] (L0 combo)
 };
 #endif
