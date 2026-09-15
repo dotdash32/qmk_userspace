@@ -7,12 +7,12 @@
 // Individual home row mod keys (for use in combos & overrides)
 #define DD_A  RALT_T(KC_A)
 #define DD_S  RCTL_T(KC_S)
-#define DD_D  LT(_NUM,KC_D)
+#define DD_D  LT(_NUM, KC_D)
 #define DD_F  LSFT_T(KC_F)
 #define DD_G  LALT_T(KC_G)
 #define DD_H  LALT_T(KC_H)
 #define DD_J  RSFT_T(KC_J)
-#define DD_K  LT(_NUM,KC_K)
+#define DD_K  LT(_NUM, KC_K)
 #define DD_L  RCTL_T(KC_L)
 #define DD_QUOT  RALT_T(KC_QUOT)
 
@@ -28,8 +28,8 @@
 
 // individual thumb keys
 #define DD_LTB_INN0 SH_OS
-#define DD_LTB_PRIM LT(_NUMPAD,KC_S)
-#define DD_LTB_SECD LT(_NUM,KC_BSPC)
+#define DD_LTB_PRIM LT(_NUMPAD, KC_S)
+#define DD_LTB_SECD LT(_NUM, KC_BSPC)
 #define DD_LTB_OUT0 KC_LGUI
 #define DD_RTB_OUT0 KC_LCTL
 #define DD_RTB_SECD TT(_NAV)
@@ -50,7 +50,7 @@
 
 // Thumbs
 #define DD_L0_THM_L  DD_LTB_INN0, DD_LTB_PRIM, DD_LTB_SECD
-#define DD_L0_THM_R  DD_LTR_INN0, DD_LTR_PRIM, DD_LTR_SECD
+#define DD_L0_THM_R  DD_RTB_SECD, DD_RTB_PRIM, DD_RTB_INN0
 // ============================================================
 // Layer 1 - Nav
 // ============================================================
@@ -71,11 +71,25 @@
 // Layer 2 - Num/Sym
 // ============================================================
 
+
+// defines for "complex" keys
+// Individual home row mod keys (for use in combos & overrides)
+#define DD_1  RALT_T(KC_1)
+#define DD_2  RCTL_T(KC_2)
+#define DD_3  LT(_NUM, KC_3)
+#define DD_4  LSFT_T(KC_4)
+#define DD_5  LALT_T(KC_5)
+#define DD_6  LALT_T(KC_6)
+#define DD_7  RSFT_T(KC_7)
+#define DD_8  LT(_NUM, KC_8)
+#define DD_9  RCTL_T(KC_9)
+#define DD_0  RALT_T(KC_0)
+
 #define DD_L2_TOP_L  KC_Q, KC_BSPC, KC_DEL, KC_ESC, DD_LWRD_NUM
 #define DD_L2_TOP_R  CW_TOGG, KC_MINS, KC_EQL, KC_COLN, KC_BSPC
 
-#define DD_L2_HRM_L  RALT_T(KC_1), RCTL_T(KC_2), LT(_NUM,KC_3), LSFT_T(KC_4), LALT_T(KC_5)
-#define DD_L2_HRM_R  LALT_T(KC_6), RSFT_T(KC_7), LT(_NUM,KC_8), RCTL_T(KC_9), RALT_T(KC_0)
+#define DD_L2_HRM_L  DD_1, DD_2, DD_3, DD_4, DD_5
+#define DD_L2_HRM_R  DD_6, DD_7, DD_8, DD_9, DD_0
 
 #define DD_L2_BOT_L  LSFT_T(KC_GRV), LCTL_T(DD_CODEBLK), LALT_T(KC_COPY), LGUI_T(KC_PSTE), CW_TOGG
 #define DD_L2_BOT_R  KC_BSLS, LGUI_T(KC_0), LALT_T(KC_SLSH), DD_DOT, RSFT_T(KC_ENT)
