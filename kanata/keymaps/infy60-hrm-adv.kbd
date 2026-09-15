@@ -38,7 +38,7 @@ Key features:
 )
 
 (defvar
-  tap-time 150
+  tap-time 250
   hold-time 200
 
   left-hand-keys (
@@ -117,7 +117,7 @@ Key features:
   LapN (layer-switch num)
 
   ;; Left hand home row mods (hrm2, rctl→cmd)
-  HCl (tap-hold $tap-time $hold-time esc $Cmod)
+  HCl (tap-hold $tap-time $hold-time esc lctl)
   Ha (tap-hold-release-keys $tap-time $hold-time (multi a @tap) ralt   $left-hand-keys)
   Hs (tap-hold-release-keys $tap-time $hold-time (multi s @tap) $Cmod  $left-hand-keys)
   HdC (chord num_toggle_pre d)
@@ -202,7 +202,7 @@ Key features:
 (deflayer nomods
   grv   1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab   q    w    e    r    t    y    u    i    o    p    [    ]    \
-  $Cmod a    s    d    f    g    h    j    k    l    ;    '    ret
+  lctl  a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft  z    x    c    v    b    n    m    ,    .    /    rsft
   lctl  lalt lmet           spc             rmet _
 )
@@ -224,7 +224,7 @@ Key features:
 )
 
 (deflayer vim-nav
-  _    _    _    _    _    _    _    _    _     _     _     _    _    _
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
   _    q    bspc del  esc  C-spc home pgdn pgup  end   _     _    _    _
   _    @HaV @HsV @HdV @HfV @HgV @HhV @HjV @HkV  @HlV  @HscV ralt _
   _    @HzV @HxV @HcV @HvV C-b  [    @HmV @HcoV @HdoV @HslV _
