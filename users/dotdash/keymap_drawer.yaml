@@ -1,0 +1,261 @@
+layout: {qmk_keyboard: maple_computing/minidox/rev1, layout_name: LAYOUT_split_3x5_3}
+layers:
+  L0:
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - {t: A, h: RALT}
+  - {t: S, h: RCTL}
+  - {t: D, h: L2}
+  - {t: F, h: LSFT}
+  - {t: G, h: LALT}
+  - {t: H, h: LALT}
+  - {t: J, h: RSFT}
+  - {t: K, h: L2}
+  - {t: L, h: RCTL}
+  - {t: '''', h: RALT}
+  - {t: Z, h: LSFT}
+  - {t: X, h: LCTL}
+  - {t: C, h: LALT}
+  - {t: V, h: LGUI}
+  - B
+  - N
+  - {t: M, h: LGUI}
+  - {t: ',', h: LALT}
+  - {t: ., h: LCTL}
+  - {t: /, h: RSFT}
+  - ANY(SH OS)
+  - {t: S, h: L4}
+  - {t: BSPC, h: L2}
+  - {t: L1, h: tap-toggle}
+  - {t: SPC, h: L1}
+  - {t: ESC, h: L6}
+  L1:
+  - Q
+  - BSPC
+  - DEL
+  - ESC
+  - Ctl+SPC
+  - HOME
+  - PGDN
+  - PGUP
+  - END
+  - BSPC
+  - {t: A, h: RALT}
+  - {t: S, h: RCTL}
+  - {t: D, h: L2}
+  - {t: F, h: LSFT}
+  - TAB
+  - LEFT
+  - {t: DOWN, h: RSFT}
+  - {t: UP, h: L2}
+  - {t: RGHT, h: RCTL}
+  - {t: ;, h: RALT}
+  - {t: Z, h: LSFT}
+  - {t: X, h: LCTL}
+  - {t: C, h: LALT}
+  - {t: V, h: LGUI}
+  - Ctl+B
+  - '['
+  - {t: SPC, h: LGUI}
+  - {t: ']', h: LALT}
+  - {t: ., h: LCTL}
+  - {t: ENT, h: RSFT}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  L2:
+  - Q
+  - BSPC
+  - DEL
+  - ESC
+  - ANY(QK USER 1)
+  - CW TOGG
+  - '-'
+  - '='
+  - ':'
+  - BSPC
+  - {t: '1', h: RALT}
+  - {t: '2', h: RCTL}
+  - {t: '3', h: L2, type: held}
+  - {t: '4', h: LSFT}
+  - {t: '5', h: LALT}
+  - {t: '6', h: LALT}
+  - {t: '7', h: RSFT}
+  - {t: '8', h: L2}
+  - {t: '9', h: RCTL}
+  - {t: '0', h: RALT}
+  - {t: '`', h: LSFT}
+  - ANY(LCTL T(QK USER 0))
+  - {t: COPY, h: LALT}
+  - {t: PSTE, h: LGUI}
+  - CW TOGG
+  - \
+  - {t: '0', h: LGUI}
+  - {t: /, h: LALT}
+  - {t: ., h: LCTL}
+  - {t: ENT, h: RSFT}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  L3:
+  - CG RSWP
+  - CG RNRM
+  - QK BOOT
+  - DB TOGG
+  - ''
+  - ''
+  - ''
+  - ''
+  - VOLU
+  - Gui+L
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - MUTE
+  - VOLD
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - MPRV
+  - MNXT
+  - MPLY
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  L4:
+  - OS LSFT
+  - BSPC
+  - E
+  - ESC
+  - ANY(QK USER 2)
+  - /
+  - '7'
+  - '8'
+  - '9'
+  - BSPC
+  - {t: A, h: RALT}
+  - {t: ., h: RCTL}
+  - {t: D, h: L2}
+  - {t: F, h: LSFT}
+  - {t: E, h: LALT}
+  - .
+  - '4'
+  - '5'
+  - '6'
+  - TAB
+  - ANY(LSFT T(QK USER 3))
+  - {t: X, h: LCTL}
+  - {t: C, h: LALT}
+  - {t: G, h: LGUI}
+  - B
+  - '0'
+  - '1'
+  - '2'
+  - '3'
+  - ENT
+  - ANY(SH OS)
+  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  L5:
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - WBAK
+  - WFWD
+  - MS WHLL
+  - MS WHLD
+  - MS WHLU
+  - MS WHLR
+  - ''
+  - MS BTN4
+  - MS BTN2
+  - MS BTN3
+  - MS BTN1
+  - MS BTN5
+  - MS LEFT
+  - MS DOWN
+  - MS UP
+  - MS RGHT
+  - MS BTN1
+  - LSFT
+  - MS ACL2
+  - MS ACL1
+  - MS ACL0
+  - RCTL
+  - RCTL
+  - LGUI
+  - LALT
+  - LCTL
+  - RSFT
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  L6:
+  - Q
+  - BSPC
+  - DEL
+  - ESC
+  - ANY(QK USER 1)
+  - F11
+  - F12
+  - F13
+  - F14
+  - F15
+  - {t: F1, h: RALT}
+  - {t: F2, h: RCTL}
+  - {t: F3, h: L2}
+  - {t: F4, h: LSFT}
+  - {t: F5, h: LALT}
+  - {t: F6, h: LALT}
+  - {t: F7, h: RSFT}
+  - {t: F8, h: L2}
+  - {t: F9, h: RCTL}
+  - {t: F10, h: RALT}
+  - {t: '`', h: LSFT}
+  - ANY(LCTL T(QK USER 0))
+  - {t: COPY, h: LALT}
+  - {t: PSTE, h: LGUI}
+  - CW TOGG
+  - \
+  - {t: '0', h: LGUI}
+  - {t: ',', h: LALT}
+  - {t: ., h: LCTL}
+  - {t: ENT, h: RSFT}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {type: held}
