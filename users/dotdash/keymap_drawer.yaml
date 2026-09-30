@@ -1,6 +1,6 @@
 layout: {qmk_keyboard: maple_computing/minidox/rev1, layout_name: LAYOUT_split_3x5_3}
 layers:
-  L0:
+  Base:
   - Q
   - W
   - E
@@ -13,12 +13,12 @@ layers:
   - P
   - {t: A, h: RALT}
   - {t: S, h: RCTL}
-  - {t: D, h: L2}
+  - {t: D, h: Num}
   - {t: F, h: LSFT}
   - {t: G, h: LALT}
   - {t: H, h: LALT}
   - {t: J, h: RSFT}
-  - {t: K, h: L2}
+  - {t: K, h: Num}
   - {t: L, h: RCTL}
   - {t: '''', h: RALT}
   - {t: Z, h: LSFT}
@@ -32,12 +32,12 @@ layers:
   - {t: ., h: LCTL}
   - {t: /, h: RSFT}
   - ANY(SH OS)
-  - {t: S, h: L4}
-  - {t: BSPC, h: L2}
-  - {t: L1, h: tap-toggle}
-  - {t: SPC, h: L1}
-  - {t: ESC, h: L6}
-  L1:
+  - {t: S, h: Numpad}
+  - {t: BSPC, h: Num}
+  - {t: Nav, h: tap-toggle}
+  - {t: SPC, h: Nav, s: _}
+  - {t: ESC, h: Fn}
+  Nav:
   - Q
   - BSPC
   - DEL
@@ -50,12 +50,12 @@ layers:
   - BSPC
   - {t: A, h: RALT}
   - {t: S, h: RCTL}
-  - {t: D, h: L2}
+  - {t: D, h: Num}
   - {t: F, h: LSFT}
   - TAB
   - LEFT
   - {t: DOWN, h: RSFT}
-  - {t: UP, h: L2}
+  - {t: UP, h: Num}
   - {t: RGHT, h: RCTL}
   - {t: ;, h: RALT}
   - {t: Z, h: LSFT}
@@ -63,8 +63,8 @@ layers:
   - {t: C, h: LALT}
   - {t: V, h: LGUI}
   - Ctl+B
-  - '['
-  - {t: SPC, h: LGUI}
+  - {t: SPC, s: _}
+  - {t: '[', h: LGUI}
   - {t: ']', h: LALT}
   - {t: ., h: LCTL}
   - {t: ENT, h: RSFT}
@@ -74,12 +74,12 @@ layers:
   - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  L2:
+  Num:
   - Q
   - BSPC
   - DEL
   - ESC
-  - ANY(QK USER 1)
+  - Lwrd Num
   - CW TOGG
   - '-'
   - '='
@@ -87,31 +87,31 @@ layers:
   - BSPC
   - {t: '1', h: RALT}
   - {t: '2', h: RCTL}
-  - {t: '3', h: L2, type: held}
+  - {t: '3', h: Num, type: held}
   - {t: '4', h: LSFT}
   - {t: '5', h: LALT}
   - {t: '6', h: LALT}
   - {t: '7', h: RSFT}
-  - {t: '8', h: L2}
-  - {t: '9', h: RCTL}
-  - {t: '0', h: RALT}
+  - {t: '8', h: Num}
+  - {t: '9', h: RCTL, s: ';'}
+  - {t: '0', h: RALT, s: ':'}
   - {t: '`', h: LSFT}
-  - ANY(LCTL T(QK USER 0))
+  - {t: CodeBlk, h: LCTL}
   - {t: COPY, h: LALT}
   - {t: PSTE, h: LGUI}
   - CW TOGG
   - \
-  - {t: '0', h: LGUI}
-  - {t: /, h: LALT}
+  - {t: '[', h: LGUI}
+  - {t: ']', h: LALT}
   - {t: ., h: LCTL}
-  - {t: ENT, h: RSFT}
+  - {t: /, s: SEnt}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  L3:
+  Sys:
   - CG RSWP
   - CG RNRM
   - QK BOOT
@@ -148,12 +148,12 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  L4:
+  Numpad:
   - OS LSFT
   - BSPC
   - E
   - ESC
-  - ANY(QK USER 2)
+  - Lwrd Pad
   - /
   - '7'
   - '8'
@@ -161,20 +161,20 @@ layers:
   - BSPC
   - {t: A, h: RALT}
   - {t: ., h: RCTL}
-  - {t: D, h: L2}
+  - {t: D, h: Num}
   - {t: F, h: LSFT}
   - {t: E, h: LALT}
   - .
   - '4'
   - '5'
   - '6'
-  - TAB
-  - ANY(LSFT T(QK USER 3))
+  - '0'
+  - {t: PadSwap, h: LSFT}
   - {t: X, h: LCTL}
   - {t: C, h: LALT}
   - {t: G, h: LGUI}
   - B
-  - '0'
+  - ','
   - '1'
   - '2'
   - '3'
@@ -185,7 +185,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  L5:
+  Mouse:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -222,12 +222,12 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  L6:
+  Fn:
   - Q
   - BSPC
   - DEL
   - ESC
-  - ANY(QK USER 1)
+  - Lwrd Num
   - F11
   - F12
   - F13
@@ -235,16 +235,16 @@ layers:
   - F15
   - {t: F1, h: RALT}
   - {t: F2, h: RCTL}
-  - {t: F3, h: L2}
+  - {t: F3, h: Num}
   - {t: F4, h: LSFT}
   - {t: F5, h: LALT}
   - {t: F6, h: LALT}
   - {t: F7, h: RSFT}
-  - {t: F8, h: L2}
+  - {t: F8, h: Num}
   - {t: F9, h: RCTL}
   - {t: F10, h: RALT}
   - {t: '`', h: LSFT}
-  - ANY(LCTL T(QK USER 0))
+  - {t: CodeBlk, h: LCTL}
   - {t: COPY, h: LALT}
   - {t: PSTE, h: LGUI}
   - CW TOGG
@@ -259,3 +259,74 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {type: held}
+
+
+combos:
+  # parens / brackets / minus (vertical neighbors)
+  - { tk: [U, J], k: {t: '(', s: '['}, l: [Base] }
+  - { tk: [I, K], k: {t: ')', s: ']'}, l: [Base] }
+  - { tk: [O, L], k: '-', l: [Base] }
+  - { tk: [J, M], k: '[', l: [Base] }
+  - { tk: [K, ','], k: ']', l: [Base] }
+  - { tk: [F, V], k: ']', l: [Base, Nav] }
+  - { tk: [D, C], k: '[', l: [Base, Nav] }
+  - { tk: ['-', '7'], k: '[', l: [Num] }
+  - { tk: ['=', '8'], k: ']', l: [Num] }
+  # layer toggle (D+K on Base, 3+8 on Num)
+  - { tk: [D, K], k: TG Num, l: [Base] }
+  - { tk: ['3', '8'], k: TG Num, l: [Num] }
+  # left-hand / punctuation
+  - { tk: [W, {t: S, h: RCTL}], k: TAB, l: [Base] }
+  - { tk: ['.', '/'], k: ENT, l: [Base] }
+  - { tk: [',', '.'], k: TAB, l: [Base, Fn] }
+  - { tk: [Z, X], k: "Ctl+`", l: [Base, Nav] }
+  # 4-key boot / 3-key one-shot Sys (offset so they don't overlap)
+  - { tk: [Q, W, E, T], k: BOOT, l: [Base], a: top, draw_separate: true}
+  - { tk: [Y, I, O, P], k: BOOT, l: [Base], a: top, draw_separate: true}
+  - { tk: [Q, E, T], k: OSL Sys, l: [Base], a: top, o: 0.6, draw_separate: true }
+  - { tk: [Y, I, P], k: OSL Sys, l: [Base], a: top, o: 0.6, draw_separate: true }
+  # other vertical neighbors
+  - { tk: [T, G], k: WBAK, l: [Base] }
+  - { tk: [P, "'"], k: ';', l: [Base] }
+  - { tk: [E, D], k: '=', l: [Base] }
+  - { tk: [R, F], k: {t: ':', s: ';'}, l: [Base] }
+
+
+draw_config:
+  key_w: 60.0
+  key_h: 56.0
+  split_gap: 30.0
+  combo_w: 28.0
+  combo_h: 26.0
+  key_rx: 6.0
+  key_ry: 6.0
+  dark_mode: auto
+  n_columns: 1
+  separate_combo_diagrams: false
+  combo_diagrams_scale: 2
+  inner_pad_w: 2.0
+  inner_pad_h: 2.0
+  outer_pad_w: 30.0
+  outer_pad_h: 56.0
+  line_spacing: 1.2
+  arc_radius: 6.0
+  append_colon_to_layer_header: true
+  small_pad: 2.0
+  legend_rel_x: 0.0
+  legend_rel_y: 0.0
+  draw_key_sides: false
+  key_side_pars:
+    rel_x: 0
+    rel_y: 4
+    rel_w: 12
+    rel_h: 12
+    rx: 4
+    ry: 4
+  svg_extra_style: ''
+  footer_text: Created with <a href="https://github.com/caksoylar/keymap-drawer">keymap-drawer</a>
+  shrink_wide_legends: 7
+  style_layer_activators: true
+  glyph_tap_size: 14
+  glyph_hold_size: 12
+  glyph_shifted_size: 10
+  glyphs: {}
