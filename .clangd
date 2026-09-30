@@ -1,4 +1,6 @@
 CompileFlags:
+  # compile_commands.json lives in the qmk_firmware tree, so point clangd there
+  CompilationDatabase: ../qmk_firmware
   Add: [-Wno-unknown-attributes, -Wno-maybe-uninitialized, -Wno-unknown-warning-option]
   Remove: [-W*, -mmcu=*, -mcpu=*, -mfpu=*, -mfloat-abi=*, -mno-unaligned-access, -mno-thumb-interwork, -mcall-prologues, -D__has_include*]
   Compiler: clang
