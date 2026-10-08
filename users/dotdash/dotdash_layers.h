@@ -1,5 +1,8 @@
 #pragma once
 
+// useful contractions
+#define LNX_LCK LGUI(KC_L)
+
 // ============================================================
 // Layer 0 - Base (QWERTY + home row mods)
 // ============================================================
@@ -102,7 +105,7 @@
 // ============================================================
 
 #define DD_L3_TOP_L  CG_RSWP, CG_RNRM, QK_BOOT, DB_TOGG, KC_NO
-#define DD_L3_TOP_R  KC_NO, KC_NO, KC_NO, KC_VOLU, LGUI(KC_L)
+#define DD_L3_TOP_R  KC_NO, KC_NO, KC_NO, KC_VOLU, LNX_LCK,
 
 #define DD_L3_HRM_L  KC_NO, KC_NO, KC_NO, KC_NO, KC_NO
 #define DD_L3_HRM_R  KC_NO, KC_NO, KC_MUTE, KC_VOLD, KC_NO
