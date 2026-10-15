@@ -292,29 +292,31 @@ def parse_bindings(table=None):
 
 
 def build_table_data(all_bindings, tables):
+    """Bucket bindings by base key and modifier combination.
+
+    Each entry is stored as binds[base_key][mods_str] where mods_str is the
+    canonical ordering of the active modifiers, e.g. "", "S", "C", "M", "SC", "CM"...
+    This lets the UI toggle Shift/Ctrl/Alt independently and hit any combination.
+    """
     table_data = {}
     for tbl in tables:
-        layers = {"bare": {}, "shift": {}, "ctrl": {}, "alt": {}}
-        other_mods = {}
+        binds = {}
         for tmux_key, cmd in all_bindings[tbl].items():
             cat = categorize_command(cmd)
             entry = {"cmd": cmd, "cat": cat}
-            if tmux_key.startswith("C-M-") or tmux_key.startswith("M-C-"):
-                other_mods[tmux_key] = entry
-            elif tmux_key.startswith("C-"):
-                base = tmux_key[2:]
-                layers["ctrl"][base] = entry
-            elif tmux_key.startswith("M-"):
-                base = tmux_key[2:]
-                layers["alt"][base] = entry
-            elif tmux_key.startswith("S-"):
-                base = tmux_key[2:]
-                layers["shift"][base] = entry
-            elif len(tmux_key) == 1 and tmux_key.isupper():
-                layers["shift"][tmux_key.lower()] = entry
-            else:
-                layers["bare"][tmux_key] = entry
-        table_data[tbl] = {"layers": layers, "other_mods": other_mods}
+            base = tmux_key
+            mods = set()
+            if "-" in base:
+                parts = base.split("-")
+                while parts and len(parts[0]) == 1 and parts[0] in ("S", "C", "M"):
+                    mods.add(parts.pop(0))
+                base = "-".join(parts)
+            elif len(base) == 1 and base.isupper():
+                base = base.lower()
+                mods.add("S")
+            mods_str = "".join(m for m in "SCM" if m in mods)
+            binds.setdefault(base, {})[mods_str] = entry
+        table_data[tbl] = {"binds": binds}
     return table_data
 
 
@@ -507,32 +509,6 @@ h1 {{
     margin-left: 200px;
     margin-top: 8px;
 }}
-.modifiers {{
-    margin-top: 16px;
-    columns: 2;
-    column-gap: 32px;
-}}
-.mod-entry {{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 8px;
-    margin-bottom: 4px;
-    border-radius: 4px;
-    font-size: 0.82em;
-    break-inside: avoid;
-}}
-.mod-entry:hover {{ background: #16213e; }}
-.mod-key {{
-    font-weight: 600;
-    min-width: 80px;
-}}
-.mod-cmd {{
-    opacity: 0.7;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}}
 .legend {{
     display: flex;
     gap: 16px;
@@ -629,11 +605,10 @@ h1 {{
     html += """    </div>
   </div>
   <div class="control-group">
-    <span class="control-label">Modifier:</span>
-    <button class="mod-toggle active" data-mod="bare" onclick="setModLayer('bare')">None</button>
-    <button class="mod-toggle" data-mod="shift" onclick="setModLayer('shift')">Shift</button>
-    <button class="mod-toggle" data-mod="ctrl" onclick="setModLayer('ctrl')">Ctrl</button>
-    <button class="mod-toggle" data-mod="alt" onclick="setModLayer('alt')">Alt</button>
+    <span class="control-label">Modifiers (toggle):</span>
+    <button class="mod-toggle" data-mod="shift" onclick="toggleMod('shift')">Shift</button>
+    <button class="mod-toggle" data-mod="ctrl" onclick="toggleMod('ctrl')">Ctrl</button>
+    <button class="mod-toggle" data-mod="alt" onclick="toggleMod('alt')">Alt</button>
   </div>
 """
 
@@ -673,19 +648,6 @@ h1 {{
                     f'<span class="qmk-label"></span></div>\n')
         html += '    </div>\n'
         html += '  </div>\n'
-
-        # Other modifier combos
-        data = table_data[tbl]
-        if data["other_mods"]:
-            html += '  <div class="modifiers">\n'
-            html += '    <h3 style="font-size:0.9em;margin-bottom:8px;color:#888;">Other combos</h3>\n'
-            for key in sorted(data["other_mods"].keys()):
-                entry = data["other_mods"][key]
-                html += (f'    <div class="mod-entry">'
-                        f'<span class="mod-key cat-{entry["cat"]}">{escape(key)}</span>'
-                        f'<span class="mod-cmd">{escape(entry["cmd"])}</span></div>\n')
-            html += '  </div>\n'
-
         html += '</div>\n'
 
     # Legend
@@ -717,8 +679,16 @@ const catColors = """ + json.dumps(CATEGORY_COLORS) + """;
 const catLabels = {nav:'navigation', pane:'pane', window:'window', session:'session', copy:'copy', misc:'other'};
 
 let currentTable = '""" + tables[0] + """';
-let currentMod = 'bare';
+let currentMods = {shift: false, ctrl: false, alt: false};
 let currentQmkLayer = -1;
+
+function activeModString() {
+    return (currentMods.shift ? 'S' : '') + (currentMods.ctrl ? 'C' : '') + (currentMods.alt ? 'M' : '');
+}
+
+function activeModPrefix() {
+    return activeModString().split('').map(c => c + '-').join('');
+}
 
 function switchTab(name) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -730,10 +700,9 @@ function switchTab(name) {
     hidePopup();
 }
 
-function setModLayer(mod) {
-    document.querySelectorAll('.mod-toggle').forEach(b => b.classList.remove('active'));
-    document.querySelector(`[data-mod="${mod}"]`).classList.add('active');
-    currentMod = mod;
+function toggleMod(mod) {
+    currentMods[mod] = !currentMods[mod];
+    document.querySelector(`[data-mod="${mod}"]`).classList.toggle('active', currentMods[mod]);
     renderKeys();
     hidePopup();
 }
@@ -749,7 +718,8 @@ function setQmkLayer(idx) {
 function renderKeys() {
     const data = bindingData[currentTable];
     if (!data) return;
-    const layer = data.layers[currentMod] || {};
+    const modsStr = activeModString();
+    const binds = data.binds;
     const qmkLayer = (qmkData && currentQmkLayer >= 0) ? qmkData.layers[currentQmkLayer] : null;
     const activeLayer = document.querySelector('.layer.active');
     if (!activeLayer) return;
@@ -758,7 +728,7 @@ function renderKeys() {
         const keyName = el.dataset.key;
         const cmdEl = el.querySelector('.cmd');
         const qmkEl = el.querySelector('.qmk-label');
-        const entry = layer[keyName];
+        const entry = (binds[keyName] || {})[modsStr];
 
         // Reset classes
         el.className = 'key';
@@ -812,10 +782,7 @@ function renderKeys() {
 
 function showPopup(el, key, cmd, cat, qmkInfo) {
     const popup = document.getElementById('popup');
-    const prefix = currentMod === 'bare' ? '' :
-                   currentMod === 'shift' ? 'S-' :
-                   currentMod === 'ctrl' ? 'C-' : 'M-';
-    document.getElementById('popup-key').textContent = prefix + key;
+    document.getElementById('popup-key').textContent = activeModPrefix() + key;
 
     const cmdEl = document.getElementById('popup-cmd');
     const catEl = document.getElementById('popup-cat');
