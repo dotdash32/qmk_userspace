@@ -39,6 +39,7 @@ CATEGORY_COLORS = {
     "session": "#bb8fce",
     "copy": "#ec7063",
     "misc": "#aab7b8",
+    "vim": "#e67e22",
 }
 
 # Map QMK keycodes to the tmux key name they'd produce
@@ -320,12 +321,55 @@ def build_table_data(all_bindings, tables):
     return table_data
 
 
-def generate_html(all_bindings, output_path, qmk_data=None):
+def load_vim_cmds(path):
+    """Load vim_cmds.json and bucket commands by (first key, modifier combo),
+    using the same binds shape as tmux tables so the existing JS can render them."""
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+
+    grid_keys = {tmux for row in ROWS for _, tmux, _ in row} | {tmux for _, tmux, _ in ARROW_ROW}
+    modes = []
+    for mode in data["modes"]:
+        binds = {}
+        for c in mode["commands"]:
+            fk = c.get("first")
+            if not fk:
+                continue
+            base = fk["base"]
+            if base not in grid_keys:
+                continue
+            mods_str = "".join(m for m in "SCM" if m in fk.get("mods", []))
+            binds.setdefault(base, {}).setdefault(mods_str, []).append(c.get("desc", ""))
+        out_binds = {}
+        for base, modmap in binds.items():
+            out_binds[base] = {}
+            for mods_str, descs in modmap.items():
+                out_binds[base][mods_str] = {
+                    "cmd": descs[0] if len(descs) == 1 else f"{len(descs)} commands",
+                    "cat": "vim",
+                    "cmds": descs,
+                }
+        if out_binds:
+            modes.append({"id": mode["id"], "label": mode["label"], "binds": out_binds})
+    return modes
+
+
+def generate_html(all_bindings, output_path, qmk_data=None, vim_modes=None):
     preferred_order = ["root", "prefix", "copy-mode-vi", "copy-mode"]
     tables = [t for t in preferred_order if t in all_bindings]
     tables += sorted(t for t in all_bindings if t not in preferred_order)
 
-    table_data = build_table_data(all_bindings, tables)
+    tmux_tables = list(tables)
+    table_data = build_table_data(all_bindings, tmux_tables)
+    tab_labels = {t: f"tmux: {t}" for t in tmux_tables}
+    vim_tables = []
+    if vim_modes:
+        for vm in vim_modes:
+            name = f"vim-{vm['id']}"
+            table_data[name] = {"binds": vm["binds"]}
+            tables.append(name)
+            vim_tables.append(name)
+            tab_labels[name] = f"vim: {vm['label']}"
     binding_json = json.dumps(table_data)
     qmk_json = json.dumps(qmk_data) if qmk_data else "null"
 
@@ -350,10 +394,10 @@ h1 {{
 }}
 .controls {{
     display: flex;
-    gap: 24px;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
 }}
 .control-group {{
     display: flex;
@@ -588,39 +632,44 @@ h1 {{
 .cat-session {{ border-color: {CATEGORY_COLORS['session']}; color: {CATEGORY_COLORS['session']}; }}
 .cat-copy {{ border-color: {CATEGORY_COLORS['copy']}; color: {CATEGORY_COLORS['copy']}; }}
 .cat-misc {{ border-color: {CATEGORY_COLORS['misc']}; color: {CATEGORY_COLORS['misc']}; }}
+.cat-vim {{ border-color: {CATEGORY_COLORS['vim']}; color: {CATEGORY_COLORS['vim']}; }}
 </style>
 </head>
 <body>
 <h1>tmux keybindings</h1>
 <div class="controls">
   <div class="control-group">
-    <span class="control-label">Table:</span>
     <div class="tabs">
 """
 
-    for i, tbl in enumerate(tables):
+    for i, tbl in enumerate(tmux_tables):
         active = "active" if i == 0 else ""
-        html += f'      <div class="tab {active}" data-table="{tbl}" onclick="switchTab(\'{tbl}\')">{escape(tbl)}</div>\n'
+        html += f'      <div class="tab {active}" data-table="{tbl}" onclick="switchTab(\'{tbl}\')">{escape(tab_labels[tbl])}</div>\n'
 
     html += """    </div>
   </div>
-  <div class="control-group">
-    <span class="control-label">Modifiers (toggle):</span>
-    <button class="mod-toggle" data-mod="shift" onclick="toggleMod('shift')">Shift</button>
-    <button class="mod-toggle" data-mod="ctrl" onclick="toggleMod('ctrl')">Ctrl</button>
-    <button class="mod-toggle" data-mod="alt" onclick="toggleMod('alt')">Alt</button>
-  </div>
 """
 
-    if qmk_data:
+    if vim_tables:
         html += '  <div class="control-group">\n'
-        html += '    <span class="control-label">QMK Layer:</span>\n'
+        html += '    <div class="tabs">\n'
+        for tbl in vim_tables:
+            html += f'      <div class="tab" data-table="{tbl}" onclick="switchTab(\'{tbl}\')">{escape(tab_labels[tbl])}</div>\n'
+        html += '    </div>\n  </div>\n'
+
+    html += '  <div class="control-group">\n'
+    html += '    <span class="control-label">Modifiers (toggle):</span>\n'
+    html += '    <button class="mod-toggle" data-mod="shift" onclick="toggleMod(\'shift\')">Shift</button>\n'
+    html += '    <button class="mod-toggle" data-mod="ctrl" onclick="toggleMod(\'ctrl\')">Ctrl</button>\n'
+    html += '    <button class="mod-toggle" data-mod="alt" onclick="toggleMod(\'alt\')">Alt</button>\n'
+
+    if qmk_data:
+        html += '    <span class="control-label" style="margin-left:16px;">QMK Layer:</span>\n'
         html += '    <button class="qmk-toggle active" data-qmk="-1" onclick="setQmkLayer(-1)">Off</button>\n'
         for i in range(len(qmk_data["layers"])):
             html += f'    <button class="qmk-toggle" data-qmk="{i}" onclick="setQmkLayer({i})">L{i}</button>\n'
-        html += '  </div>\n'
 
-    html += '</div>\n'
+    html += '  </div>\n</div>\n'
 
     # Generate keyboard structure for each table
     for i, tbl in enumerate(tables):
@@ -676,7 +725,7 @@ h1 {{
 const bindingData = """ + binding_json + """;
 const qmkData = """ + qmk_json + """;
 const catColors = """ + json.dumps(CATEGORY_COLORS) + """;
-const catLabels = {nav:'navigation', pane:'pane', window:'window', session:'session', copy:'copy', misc:'other'};
+const catLabels = {nav:'navigation', pane:'pane', window:'window', session:'session', copy:'copy', misc:'other', vim:'vim'};
 
 let currentTable = '""" + tables[0] + """';
 let currentMods = {shift: false, ctrl: false, alt: false};
@@ -772,21 +821,25 @@ function renderKeys() {
             cmdEl.textContent = entry.cmd.length > maxLen
                 ? entry.cmd.substring(0, maxLen - 1) + '…'
                 : entry.cmd;
-            el.onclick = function() { showPopup(el, keyName, entry.cmd, cat, qmkInfo); };
+            el.onclick = function() { showPopup(el, keyName, entry, qmkInfo); };
         } else if (qmkInfo) {
-            el.onclick = function() { showPopup(el, keyName, null, null, qmkInfo); };
+            el.onclick = function() { showPopup(el, keyName, null, qmkInfo); };
             el.style.cursor = 'pointer';
         }
     });
 }
 
-function showPopup(el, key, cmd, cat, qmkInfo) {
+function showPopup(el, key, entry, qmkInfo) {
     const popup = document.getElementById('popup');
     document.getElementById('popup-key').textContent = activeModPrefix() + key;
 
     const cmdEl = document.getElementById('popup-cmd');
     const catEl = document.getElementById('popup-cat');
     const qmkEl = document.getElementById('popup-qmk');
+
+    // vim tables may hold several commands behind the same first key
+    const cmd = entry ? (entry.cmds && entry.cmds.length > 1 ? entry.cmds.join('\\n') : entry.cmd) : null;
+    const cat = entry ? entry.cat : null;
 
     if (cmd) {
         cmdEl.textContent = cmd;
@@ -863,10 +916,13 @@ renderKeys();
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Generate tmux keybinding HTML visualizer")
+    script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     parser.add_argument("output", nargs="?", default=os.path.expanduser("~/tmux-keys.html"),
                        help="Output HTML file path")
     parser.add_argument("-k", "--keymap", help="Path to QMK keymap.json for overlay")
-    script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    parser.add_argument("--vim-cmds",
+                       default=os.path.normpath(os.path.join(script_dir, "..", "vim_cmds.json")),
+                       help="Path to parsed vim commands JSON (default: ../vim_cmds.json)")
     default_qmk = os.path.normpath(os.path.join(script_dir, "..", "..", "qmk_firmware"))
     parser.add_argument("--qmk-firmware", default=default_qmk,
                        help=f"Path to qmk_firmware repo (default: {default_qmk})")
@@ -885,7 +941,13 @@ def main():
         if qmk_data:
             print(f"Loaded QMK keymap: {qmk_data['keymap']} ({len(qmk_data['layers'])} layers)")
 
-    path = generate_html(all_bindings, args.output, qmk_data)
+    vim_modes = None
+    if os.path.exists(args.vim_cmds):
+        vim_modes = load_vim_cmds(args.vim_cmds)
+        if vim_modes:
+            print(f"Loaded vim commands: {', '.join(m['label'] for m in vim_modes)}")
+
+    path = generate_html(all_bindings, args.output, qmk_data, vim_modes)
     print(f"Written to: {path}")
     print(f"Open with: xdg-open {path}")
 
