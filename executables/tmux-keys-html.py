@@ -321,24 +321,89 @@ def build_table_data(all_bindings, tables):
     return table_data
 
 
-def load_vim_cmds(path):
-    """Load vim_cmds.json and bucket commands by (first key, modifier combo),
-    using the same binds shape as tmux tables so the existing JS can render them."""
-    with open(path, encoding="utf-8") as f:
-        data = json.load(f)
+# Aliases for first-key names that differ between vim_cmds.json and custom
+# mapping dumps (e.g. nvim :map exports)
+VIM_BASE_ALIASES = {
+    " ": "Space",
+    "Esc": "Escape", "ESC": "Escape",
+    "BS": "BSpace", "Del": "Delete",
+    "PageUp": "PgUp", "PageDown": "PgDn",
+    "Tab": "Tab", "CR": "Enter",
+}
 
+
+def normalize_vim_first(fk):
+    """Normalize a command's 'first' key to a grid key name.
+
+    Handles naming differences across vim_cmds.json and custom mapping dumps:
+    ' ' -> Space, 'Esc' -> Escape, 'BS' -> BSpace, uppercase single chars
+    (e.g. 'C' for a plain "C" mapping) -> lowercase + Shift. Returns None for
+    keys that can't be placed on the grid (e.g. 'Plug').
+    """
+    if not fk:
+        return None
+    base = fk["base"]
+    mods = {m for m in "SCM" if m in fk.get("mods", [])}
+    if base in VIM_BASE_ALIASES:
+        base = VIM_BASE_ALIASES[base]
+    elif len(base) == 1 and base.isalpha() and base.isupper():
+        mods.add("S")
+        base = base.lower()
+    elif len(base) != 1:
+        return None
+    return {"base": base, "mods_str": "".join(m for m in "SCM" if m in mods)}
+
+
+def merge_vim_cmds(base_data, overlay_data):
+    """Merge a custom-mapping overlay on top of the base vim command list.
+
+    Per (mode, first key, modifiers): if the overlay provides entries they
+    replace the base ones; otherwise the base entries stand. Modes that only
+    exist in the overlay are added.
+    """
+    modes = {}
+    order = []
+    for data in (base_data, overlay_data):
+        if not data:
+            continue
+        for i, mode in enumerate(data["modes"]):
+            mid = mode["id"]
+            if mid not in modes:
+                modes[mid] = {"label": mode["label"], "cells": {}}
+                order.append(mid)
+            for c in mode["commands"]:
+                fk = normalize_vim_first(c.get("first"))
+                if not fk:
+                    continue
+                key = (fk["base"], fk["mods_str"])
+                source = "base" if data is base_data else "overlay"
+                cells = modes[mid]["cells"]
+                cells.setdefault(key, {"base": [], "overlay": []})[source].append(c)
+
+    merged_modes = []
+    for mid in order:
+        commands = []
+        for cell in modes[mid]["cells"].values():
+            commands.extend(cell["overlay"] if cell["overlay"] else cell["base"])
+        merged_modes.append({"id": mid, "label": modes[mid]["label"], "commands": commands})
+    return {"modes": merged_modes}
+
+
+def build_vim_modes(data):
+    """Bucket vim commands by (first key, modifier combo),
+    using the same binds shape as tmux tables so the existing JS can render them."""
     grid_keys = {tmux for row in ROWS for _, tmux, _ in row} | {tmux for _, tmux, _ in ARROW_ROW}
     modes = []
     for mode in data["modes"]:
         binds = {}
         for c in mode["commands"]:
-            fk = c.get("first")
+            fk = normalize_vim_first(c.get("first"))
             if not fk:
                 continue
             base = fk["base"]
             if base not in grid_keys:
                 continue
-            mods_str = "".join(m for m in "SCM" if m in fk.get("mods", []))
+            mods_str = fk["mods_str"]
             binds.setdefault(base, {}).setdefault(mods_str, []).append(c.get("desc", ""))
         out_binds = {}
         for base, modmap in binds.items():
@@ -352,6 +417,23 @@ def load_vim_cmds(path):
         if out_binds:
             modes.append({"id": mode["id"], "label": mode["label"], "binds": out_binds})
     return modes
+
+
+def load_vim_cmds(path, overlay_path=None):
+    base = None
+    if path and os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            base = json.load(f)
+    if overlay_path:
+        if not os.path.exists(overlay_path):
+            print(f"Warning: vim overlay file not found: {overlay_path}", file=sys.stderr)
+        else:
+            with open(overlay_path, encoding="utf-8") as f:
+                overlay = json.load(f)
+            base = merge_vim_cmds(base or {"modes": []}, overlay)
+    if not base:
+        return []
+    return build_vim_modes(base)
 
 
 def generate_html(all_bindings, output_path, qmk_data=None, vim_modes=None):
@@ -923,6 +1005,10 @@ def main():
     parser.add_argument("--vim-cmds",
                        default=os.path.normpath(os.path.join(script_dir, "..", "vim_cmds.json")),
                        help="Path to parsed vim commands JSON (default: ../vim_cmds.json)")
+    parser.add_argument("--vim-cmds-overlay",
+                       default=os.path.normpath(os.path.join(script_dir, "..", "keymap-overlay.json")),
+                       help="Custom mapping dump to overlay on the base vim commands "
+                            "(default: ../keymap-overlay.json)")
     default_qmk = os.path.normpath(os.path.join(script_dir, "..", "..", "qmk_firmware"))
     parser.add_argument("--qmk-firmware", default=default_qmk,
                        help=f"Path to qmk_firmware repo (default: {default_qmk})")
@@ -941,11 +1027,10 @@ def main():
         if qmk_data:
             print(f"Loaded QMK keymap: {qmk_data['keymap']} ({len(qmk_data['layers'])} layers)")
 
-    vim_modes = None
-    if os.path.exists(args.vim_cmds):
-        vim_modes = load_vim_cmds(args.vim_cmds)
-        if vim_modes:
-            print(f"Loaded vim commands: {', '.join(m['label'] for m in vim_modes)}")
+    vim_modes = load_vim_cmds(args.vim_cmds, args.vim_cmds_overlay)
+    if vim_modes:
+        overlay_note = f" (overlay: {args.vim_cmds_overlay})" if args.vim_cmds_overlay else ""
+        print(f"Loaded vim commands{overlay_note}: {', '.join(m['label'] for m in vim_modes)}")
 
     path = generate_html(all_bindings, args.output, qmk_data, vim_modes)
     print(f"Written to: {path}")
