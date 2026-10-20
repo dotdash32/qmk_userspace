@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-"""Generate an interactive HTML keyboard layout for tmux keybindings with click popups,
-modifier toggles, and QMK keymap overlay to show which keys are still available."""
+"""Generate an interactive HTML keyboard layout (full 100% ANSI, no numpad) for
+tmux/vim keybindings with click popups, modifier toggles, and QMK keymap overlay.
+
+The QMK overlay only affects the core 60% alphanumeric set; the F-row and nav
+cluster are always shown as static keys that can still receive SW bindings.
+"""
 
 import subprocess
 import sys
@@ -9,7 +13,13 @@ import os
 import json
 from html import escape
 
-ROWS = [
+# ---------------------------------------------------------------------------
+# Layout definitions
+# ---------------------------------------------------------------------------
+
+# 60% layout — used ONLY for QMK info.json coordinate matching.
+# Tuple: (display_label, tmux_name, width_units)
+SIXTY_ROWS = [
     [("Esc", "Escape", 1), ("1", "1", 1), ("2", "2", 1), ("3", "3", 1),
      ("4", "4", 1), ("5", "5", 1), ("6", "6", 1), ("7", "7", 1),
      ("8", "8", 1), ("9", "9", 1), ("0", "0", 1), ("-", "-", 1),
@@ -20,29 +30,111 @@ ROWS = [
      ("]", "]", 1), ("\\", "\\", 1)],
     [("Caps", "Caps", 1.75), ("A", "a", 1), ("S", "s", 1), ("D", "d", 1),
      ("F", "f", 1), ("G", "g", 1), ("H", "h", 1), ("J", "j", 1),
-     ("K", "k", 1), ("L", "l", 1), (";", "\\;", 1), ("'", "'", 1),
+     ("K", "k", 1), ("L", "l", 1), (";", ";", 1), ("'", "'", 1),
      ("Enter", "Enter", 1.75)],
-    [("Shift", "Shift", 2.25), ("Z", "z", 1), ("X", "x", 1), ("C", "c", 1),
+    [("Shift", "LShift", 2.25), ("Z", "z", 1), ("X", "x", 1), ("C", "c", 1),
      ("V", "v", 1), ("B", "b", 1), ("N", "n", 1), ("M", "m", 1),
-     (",", ",", 1), (".", ".", 1), ("/", "/", 1), ("Shift", "Shift", 2.25)],
-    [("Ctrl", "C-", 1.5), ("Super", "Super", 1.25), ("Alt", "M-", 1.25),
-     ("Space", "Space", 6), ("Alt", "M-", 1.25), ("Super", "Super", 1.25),
-     ("Ctrl", "C-", 1.5)],
+     (",", ",", 1), (".", ".", 1), ("/", "/", 1), ("Shift", "RShift", 2.75)],
+    [("Ctrl", "LCtrl", 1.25), ("Win", "LGui", 1.25), ("Alt", "LAlt", 1.25),
+     ("Space", "Space", 6.25), ("Alt", "RAlt", 1.25), ("Win", "RGui", 1.25),
+     ("Menu", "App", 1.25), ("Ctrl", "RCtrl", 1.25)],
 ]
 
-ARROW_ROW = [("←", "Left", 1), ("↓", "Down", 1), ("↑", "Up", 1), ("→", "Right", 1)]
+# Full 100% ANSI layout (no numpad) — used for HTML rendering.
+# Each row is a list of items. Each item is either:
+#   ("key", display_label, tmux_name, width_units)
+#   ("gap", width_units)
+FULL_ROWS = [
+    # Row 0: F-row
+    [
+        ("key", "Esc", "Escape", 1),
+        ("gap", 1),
+        ("key", "F1", "F1", 1), ("key", "F2", "F2", 1),
+        ("key", "F3", "F3", 1), ("key", "F4", "F4", 1),
+        ("gap", 0.5),
+        ("key", "F5", "F5", 1), ("key", "F6", "F6", 1),
+        ("key", "F7", "F7", 1), ("key", "F8", "F8", 1),
+        ("gap", 0.5),
+        ("key", "F9", "F9", 1), ("key", "F10", "F10", 1),
+        ("key", "F11", "F11", 1), ("key", "F12", "F12", 1),
+        ("gap", 0.25),
+        ("key", "PrtSc", "PrtSc", 1), ("key", "ScrLk", "Scroll", 1),
+        ("key", "Pause", "Pause", 1),
+    ],
+    # Row 1: Number row + nav cluster
+    [
+        ("key", "`~", "`", 1),
+        ("key", "1!", "1", 1), ("key", "2@", "2", 1), ("key", "3#", "3", 1),
+        ("key", "4$", "4", 1), ("key", "5%", "5", 1), ("key", "6^", "6", 1),
+        ("key", "7&", "7", 1), ("key", "8*", "8", 1), ("key", "9(", "9", 1),
+        ("key", "0)", "0", 1), ("key", "-_", "-", 1), ("key", "=+", "=", 1),
+        ("key", "Bksp", "BSpace", 2),
+        ("gap", 0.25),
+        ("key", "Ins", "Insert", 1), ("key", "Home", "Home", 1),
+        ("key", "PgUp", "PgUp", 1),
+    ],
+    # Row 2: QWERTY + nav cluster
+    [
+        ("key", "Tab", "Tab", 1.5),
+        ("key", "Q", "q", 1), ("key", "W", "w", 1), ("key", "E", "e", 1),
+        ("key", "R", "r", 1), ("key", "T", "t", 1), ("key", "Y", "y", 1),
+        ("key", "U", "u", 1), ("key", "I", "i", 1), ("key", "O", "o", 1),
+        ("key", "P", "p", 1), ("key", "[{", "[", 1), ("key", "]}", "]", 1),
+        ("key", "\\|", "\\", 1.5),
+        ("gap", 0.25),
+        ("key", "Del", "Delete", 1), ("key", "End", "End", 1),
+        ("key", "PgDn", "PgDn", 1),
+    ],
+    # Row 3: Home row
+    [
+        ("key", "Caps", "Caps", 1.75),
+        ("key", "A", "a", 1), ("key", "S", "s", 1), ("key", "D", "d", 1),
+        ("key", "F", "f", 1), ("key", "G", "g", 1), ("key", "H", "h", 1),
+        ("key", "J", "j", 1), ("key", "K", "k", 1), ("key", "L", "l", 1),
+        ("key", ";:", ";", 1), ("key", "'\"", "'", 1),
+        ("key", "Enter", "Enter", 2.25),
+    ],
+    # Row 4: Bottom row + Up arrow
+    [
+        ("key", "Shift", "LShift", 2.25),
+        ("key", "Z", "z", 1), ("key", "X", "x", 1), ("key", "C", "c", 1),
+        ("key", "V", "v", 1), ("key", "B", "b", 1), ("key", "N", "n", 1),
+        ("key", "M", "m", 1), ("key", ",<", ",", 1), ("key", ".>", ".", 1),
+        ("key", "/?", "/", 1),
+        ("key", "Shift", "RShift", 2.75),
+        ("gap", 1.25),
+        ("key", "↑", "Up", 1),
+    ],
+    # Row 5: Modifiers + arrows
+    [
+        ("key", "Ctrl", "LCtrl", 1.25),
+        ("key", "Win", "LGui", 1.25),
+        ("key", "Alt", "LAlt", 1.25),
+        ("key", "Space", "Space", 6.25),
+        ("key", "Alt", "RAlt", 1.25),
+        ("key", "Win", "RGui", 1.25),
+        ("key", "Menu", "App", 1.25),
+        ("key", "Ctrl", "RCtrl", 1.25),
+        ("gap", 0.25),
+        ("key", "←", "Left", 1), ("key", "↓", "Down", 1), ("key", "→", "Right", 1),
+    ],
+]
 
-CATEGORY_COLORS = {
-    "nav": "#5dade2",
-    "pane": "#58d68d",
-    "window": "#f0b429",
-    "session": "#bb8fce",
-    "copy": "#ec7063",
-    "misc": "#aab7b8",
-    "vim": "#e67e22",
-}
 
-# Map QMK keycodes to the tmux key name they'd produce
+def full_layout_tmux_names():
+    """Return the set of all tmux key names in the full layout."""
+    names = set()
+    for row in FULL_ROWS:
+        for item in row:
+            if item[0] == "key":
+                names.add(item[2])
+    return names
+
+
+# ---------------------------------------------------------------------------
+# QMK keycode mapping (unchanged)
+# ---------------------------------------------------------------------------
+
 QMK_TO_TMUX_KEY = {
     "KC_A": "a", "KC_B": "b", "KC_C": "c", "KC_D": "d", "KC_E": "e",
     "KC_F": "f", "KC_G": "g", "KC_H": "h", "KC_I": "i", "KC_J": "j",
@@ -53,7 +145,7 @@ QMK_TO_TMUX_KEY = {
     "KC_1": "1", "KC_2": "2", "KC_3": "3", "KC_4": "4", "KC_5": "5",
     "KC_6": "6", "KC_7": "7", "KC_8": "8", "KC_9": "9", "KC_0": "0",
     "KC_MINS": "-", "KC_EQL": "=", "KC_LBRC": "[", "KC_RBRC": "]",
-    "KC_BSLS": "\\", "KC_SCLN": "\\;", "KC_QUOT": "'", "KC_GRV": "`",
+    "KC_BSLS": "\\", "KC_SCLN": ";", "KC_QUOT": "'", "KC_GRV": "`",
     "KC_COMM": ",", "KC_DOT": ".", "KC_SLSH": "/",
     "KC_SPC": "Space", "KC_ENT": "Enter", "KC_TAB": "Tab",
     "KC_BSPC": "BSpace", "KC_DEL": "Delete", "KC_ESC": "Escape",
@@ -63,7 +155,8 @@ QMK_TO_TMUX_KEY = {
     "KC_F1": "F1", "KC_F2": "F2", "KC_F3": "F3", "KC_F4": "F4",
     "KC_F5": "F5", "KC_F6": "F6", "KC_F7": "F7", "KC_F8": "F8",
     "KC_F9": "F9", "KC_F10": "F10", "KC_F11": "F11", "KC_F12": "F12",
-    "KC_PSCR": "PrtSc", "KC_VOLU": "VolUp", "KC_VOLD": "VolDn",
+    "KC_PSCR": "PrtSc", "KC_SLCK": "Scroll", "KC_PAUS": "Pause",
+    "KC_VOLU": "VolUp", "KC_VOLD": "VolDn",
     "KC_MPLY": "MediaPlay", "KC_MPRV": "MediaPrev", "KC_MNXT": "MediaNext",
     "KC_PENT": "KPEnter", "KC_PWR": "Power",
     "KC_LCTL": "LCtrl", "KC_RCTL": "RCtrl", "KC_LSFT": "LShift",
@@ -72,9 +165,7 @@ QMK_TO_TMUX_KEY = {
     "KC_NO": None,
 }
 
-# The "default" keycode for each physical position index on a standard ANSI 60% layout.
-# This is what the key would produce if unremapped — used to detect remaps.
-# Index order matches LAYOUT_60_ansi_split_bs_rshift from info.json.
+# Default (unremapped) keycode for each physical position on the 60% layout.
 DEFAULT_LAYER_0 = [
     "KC_ESC", "KC_1", "KC_2", "KC_3", "KC_4", "KC_5", "KC_6", "KC_7",
     "KC_8", "KC_9", "KC_0", "KC_MINS", "KC_EQL", "KC_BSLS", "KC_GRV",
@@ -88,16 +179,21 @@ DEFAULT_LAYER_0 = [
     "KC_APP", "KC_RCTL",
 ]
 
+
+# ---------------------------------------------------------------------------
+# QMK keymap loading
+# ---------------------------------------------------------------------------
+
 def qmk_position_to_grid_key(phys_layout):
-    """Map QMK physical layout indices to our grid's tmux key names."""
+    """Map QMK physical layout indices to 60% grid tmux key names via coordinates."""
     idx_to_key = {}
     for idx, pos in enumerate(phys_layout):
         x, y = pos["x"], pos["y"]
         row_idx = int(y)
-        if row_idx >= len(ROWS):
+        if row_idx >= len(SIXTY_ROWS):
             continue
         curr_x = 0.0
-        for _, tmux_name, width in ROWS[row_idx]:
+        for _, tmux_name, width in SIXTY_ROWS[row_idx]:
             if abs(curr_x - x) < 0.3:
                 idx_to_key[idx] = tmux_name
                 break
@@ -106,7 +202,7 @@ def qmk_position_to_grid_key(phys_layout):
 
 
 def parse_qmk_keycode(kc):
-    """Extract the base keycode and modifier info from QMK keycode."""
+    """Extract the base keycode and modifier info from a QMK keycode string."""
     if kc in ("KC_TRNS", "KC_NO", "KC_TRANSPARENT", "_______", "XXXXXXX"):
         return kc, None
 
@@ -188,7 +284,6 @@ def load_qmk_keymap(keymap_path, qmk_firmware_path=None):
     layout_name = keymap.get("layout", "")
 
     info_path = find_info_json(keyboard_name, layout_name, keymap_path, qmk_firmware_path)
-
     if not info_path:
         print(f"Warning: Could not find info.json with layout '{layout_name}'", file=sys.stderr)
         return None
@@ -247,6 +342,21 @@ def load_qmk_keymap(keymap_path, qmk_firmware_path=None):
         "keymap": keymap.get("keymap", ""),
         "layers": layers_data,
     }
+
+
+# ---------------------------------------------------------------------------
+# tmux binding parsing
+# ---------------------------------------------------------------------------
+
+CATEGORY_COLORS = {
+    "nav": "#5dade2",
+    "pane": "#58d68d",
+    "window": "#f0b429",
+    "session": "#bb8fce",
+    "copy": "#ec7063",
+    "misc": "#aab7b8",
+    "vim": "#e67e22",
+}
 
 
 def categorize_command(cmd):
@@ -321,25 +431,23 @@ def build_table_data(all_bindings, tables):
     return table_data
 
 
-# Aliases for first-key names that differ between vim_cmds.json and custom
-# mapping dumps (e.g. nvim :map exports)
+# ---------------------------------------------------------------------------
+# Vim command handling
+# ---------------------------------------------------------------------------
+
 VIM_BASE_ALIASES = {
     " ": "Space",
     "Esc": "Escape", "ESC": "Escape",
     "BS": "BSpace", "Del": "Delete",
     "PageUp": "PgUp", "PageDown": "PgDn",
     "Tab": "Tab", "CR": "Enter",
+    "Home": "Home", "End": "End",
+    "Up": "Up", "Down": "Down", "Left": "Left", "Right": "Right",
 }
 
 
 def normalize_vim_first(fk):
-    """Normalize a command's 'first' key to a grid key name.
-
-    Handles naming differences across vim_cmds.json and custom mapping dumps:
-    ' ' -> Space, 'Esc' -> Escape, 'BS' -> BSpace, uppercase single chars
-    (e.g. 'C' for a plain "C" mapping) -> lowercase + Shift. Returns None for
-    keys that can't be placed on the grid (e.g. 'Plug').
-    """
+    """Normalize a command's 'first' key to a grid key name."""
     if not fk:
         return None
     base = fk["base"]
@@ -350,17 +458,16 @@ def normalize_vim_first(fk):
         mods.add("S")
         base = base.lower()
     elif len(base) != 1:
-        return None
+        # Multi-char keys that aren't in aliases (e.g. "Plug", "F1"-"F12")
+        if base.startswith("F") and base[1:].isdigit():
+            pass  # F-keys are valid
+        else:
+            return None
     return {"base": base, "mods_str": "".join(m for m in "SCM" if m in mods)}
 
 
 def merge_vim_cmds(base_data, overlay_data):
-    """Merge a custom-mapping overlay on top of the base vim command list.
-
-    Per (mode, first key, modifiers): if the overlay provides entries they
-    replace the base ones; otherwise the base entries stand. Modes that only
-    exist in the overlay are added.
-    """
+    """Merge a custom-mapping overlay on top of the base vim command list."""
     modes = {}
     order = []
     for data in (base_data, overlay_data):
@@ -390,9 +497,8 @@ def merge_vim_cmds(base_data, overlay_data):
 
 
 def build_vim_modes(data):
-    """Bucket vim commands by (first key, modifier combo),
-    using the same binds shape as tmux tables so the existing JS can render them."""
-    grid_keys = {tmux for row in ROWS for _, tmux, _ in row} | {tmux for _, tmux, _ in ARROW_ROW}
+    """Bucket vim commands by (first key, modifier combo) for grid rendering."""
+    grid_keys = full_layout_tmux_names()
     modes = []
     for mode in data["modes"]:
         binds = {}
@@ -436,6 +542,10 @@ def load_vim_cmds(path, overlay_path=None):
     return build_vim_modes(base)
 
 
+# ---------------------------------------------------------------------------
+# HTML generation
+# ---------------------------------------------------------------------------
+
 def generate_html(all_bindings, output_path, qmk_data=None, vim_modes=None):
     preferred_order = ["root", "prefix", "copy-mode-vi", "copy-mode"]
     tables = [t for t in preferred_order if t in all_bindings]
@@ -454,6 +564,9 @@ def generate_html(all_bindings, output_path, qmk_data=None, vim_modes=None):
             tab_labels[name] = f"vim: {vm['label']}"
     binding_json = json.dumps(table_data)
     qmk_json = json.dumps(qmk_data) if qmk_data else "null"
+
+    # Build the keyboard HTML (shared across all layers)
+    keyboard_html = _build_keyboard_html()
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -485,6 +598,7 @@ h1 {{
     display: flex;
     gap: 4px;
     align-items: center;
+    flex-wrap: wrap;
 }}
 .control-label {{
     font-size: 0.8em;
@@ -548,26 +662,19 @@ h1 {{
 .layer {{ display: none; }}
 .layer.active {{ display: block; }}
 .keyboard {{
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    position: relative;
     margin-bottom: 20px;
 }}
-.row {{
-    display: flex;
-    gap: 4px;
-}}
 .key {{
-    position: relative;
-    height: 54px;
-    border-radius: 6px;
+    position: absolute;
+    border-radius: 5px;
     border: 1px solid #333;
     background: #16213e;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 0.75em;
+    font-size: 0.7em;
     cursor: default;
     transition: all 0.15s;
     overflow: hidden;
@@ -575,11 +682,14 @@ h1 {{
 .key .label {{
     font-weight: 600;
     font-size: 1.1em;
+    line-height: 1.2;
+    white-space: pre;
+    text-align: center;
 }}
 .key .cmd {{
-    font-size: 0.8em;
+    font-size: 0.75em;
     opacity: 0.7;
-    max-width: 90%;
+    max-width: 95%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -589,7 +699,7 @@ h1 {{
     position: absolute;
     top: 2px;
     right: 4px;
-    font-size: 0.65em;
+    font-size: 0.6em;
     opacity: 0.6;
     color: #bb8fce;
 }}
@@ -603,11 +713,9 @@ h1 {{
     z-index: 10;
 }}
 .key.qmk-default {{
-    /* Key produces its normal character — fully available for tmux */
     box-shadow: inset 0 0 0 2px rgba(88, 214, 141, 0.3);
 }}
 .key.qmk-remapped {{
-    /* Key produces something different — annotate what it sends */
     background: #2a1a1a;
     border-color: #c0392b;
 }}
@@ -617,7 +725,6 @@ h1 {{
     opacity: 0.9;
 }}
 .key.qmk-transparent {{
-    /* Falls through to lower layer — available */
     box-shadow: inset 0 0 0 2px rgba(88, 214, 141, 0.2);
     background: #16213e;
 }}
@@ -628,12 +735,6 @@ h1 {{
 .key.qmk-layer {{
     background: #1a1a2a;
     border-color: #666;
-}}
-.arrow-row {{
-    display: flex;
-    gap: 4px;
-    margin-left: 200px;
-    margin-top: 8px;
 }}
 .legend {{
     display: flex;
@@ -697,6 +798,7 @@ h1 {{
     padding-top: 8px;
     border-top: 1px solid #333;
     color: #bb8fce;
+    white-space: pre-wrap;
 }}
 .popup .popup-close {{
     position: absolute;
@@ -746,39 +848,18 @@ h1 {{
     html += '    <button class="mod-toggle" data-mod="alt" onclick="toggleMod(\'alt\')">Alt</button>\n'
 
     if qmk_data:
-        html += '    <span class="control-label" style="margin-left:16px;">QMK Layer:</span>\n'
+        html += '    <span class="control-label" style="margin-left:16px;">QMK Layer (60% only):</span>\n'
         html += '    <button class="qmk-toggle active" data-qmk="-1" onclick="setQmkLayer(-1)">Off</button>\n'
         for i in range(len(qmk_data["layers"])):
             html += f'    <button class="qmk-toggle" data-qmk="{i}" onclick="setQmkLayer({i})">L{i}</button>\n'
 
     html += '  </div>\n</div>\n'
 
-    # Generate keyboard structure for each table
+    # Generate a layer div for each table (all share the same keyboard structure)
     for i, tbl in enumerate(tables):
         active = "active" if i == 0 else ""
         html += f'<div class="layer {active}" id="layer-{tbl}">\n'
-        html += '  <div class="keyboard">\n'
-
-        for row in ROWS:
-            html += '    <div class="row">\n'
-            for key_label, tmux_name, width in row:
-                px_width = int(width * 54 + (width - 1) * 4)
-                html += (f'      <div class="key" data-key="{escape(tmux_name)}" '
-                        f'style="width:{px_width}px">'
-                        f'<span class="label">{escape(key_label)}</span>'
-                        f'<span class="cmd"></span>'
-                        f'<span class="qmk-label"></span></div>\n')
-            html += '    </div>\n'
-
-        html += '    <div class="arrow-row">\n'
-        for key_label, tmux_name, width in ARROW_ROW:
-            html += (f'      <div class="key" data-key="{escape(tmux_name)}" '
-                    f'style="width:54px">'
-                    f'<span class="label">{escape(key_label)}</span>'
-                    f'<span class="cmd"></span>'
-                    f'<span class="qmk-label"></span></div>\n')
-        html += '    </div>\n'
-        html += '  </div>\n'
+        html += keyboard_html
         html += '</div>\n'
 
     # Legend
@@ -867,15 +948,13 @@ function renderKeys() {
         cmdEl.textContent = '';
         qmkEl.textContent = '';
 
-        // Apply QMK overlay
+        // Apply QMK overlay (only affects 60% keys that exist in qmkLayer)
         let qmkInfo = null;
         if (qmkLayer && qmkLayer[keyName]) {
             qmkInfo = qmkLayer[keyName];
             if (qmkInfo.status === 'default') {
-                // Key produces its normal char — available for tmux
                 el.classList.add('qmk-default');
             } else if (qmkInfo.status === 'remapped') {
-                // Key produces something different — show what it resolves to
                 el.classList.add('qmk-remapped');
                 qmkEl.textContent = qmkInfo.resolved || '';
             } else if (qmkInfo.status === 'transparent') {
@@ -886,7 +965,6 @@ function renderKeys() {
                 el.classList.add('qmk-layer');
                 qmkEl.textContent = qmkInfo.raw;
             }
-            // Show mod-tap info if present
             if (qmkInfo.mod && qmkInfo.status !== 'layer') {
                 const existing = qmkEl.textContent;
                 qmkEl.textContent = existing ? qmkInfo.mod + '/' + existing : qmkInfo.mod;
@@ -895,17 +973,17 @@ function renderKeys() {
             el.classList.add('qmk-default');
         }
 
-        // Apply tmux binding
+        // Apply SW binding
         if (entry) {
             const cat = entry.cat;
             el.classList.add('bound', 'cat-' + cat);
-            const maxLen = Math.max(6, Math.floor(el.offsetWidth / 7));
+            const maxLen = Math.max(4, Math.floor(el.offsetWidth / 7));
             cmdEl.textContent = entry.cmd.length > maxLen
-                ? entry.cmd.substring(0, maxLen - 1) + '…'
+                ? entry.cmd.substring(0, maxLen - 1) + '\\u2026'
                 : entry.cmd;
-            el.onclick = function() { showPopup(el, keyName, entry, qmkInfo); };
+            el.onclick = function() {{ showPopup(el, keyName, entry, qmkInfo); }};
         } else if (qmkInfo) {
-            el.onclick = function() { showPopup(el, keyName, null, qmkInfo); };
+            el.onclick = function() {{ showPopup(el, keyName, null, qmkInfo); }};
             el.style.cursor = 'pointer';
         }
     });
@@ -919,7 +997,6 @@ function showPopup(el, key, entry, qmkInfo) {
     const catEl = document.getElementById('popup-cat');
     const qmkEl = document.getElementById('popup-qmk');
 
-    // vim tables may hold several commands behind the same first key
     const cmd = entry ? (entry.cmds && entry.cmds.length > 1 ? entry.cmds.join('\\n') : entry.cmd) : null;
     const cat = entry ? entry.cat : null;
 
@@ -938,16 +1015,16 @@ function showPopup(el, key, entry, qmkInfo) {
     if (qmkInfo) {
         let qmkText = 'QMK: ' + qmkInfo.raw;
         if (qmkInfo.status === 'default') {
-            qmkText += ' (standard — available for tmux)';
+            qmkText += '\\n(standard \\u2014 available for tmux)';
         } else if (qmkInfo.status === 'remapped') {
             qmkText += '\\nResolves to: ' + (qmkInfo.resolved || '?');
             if (qmkInfo.default) qmkText += ' (normally: ' + qmkInfo.default + ')';
         } else if (qmkInfo.status === 'transparent') {
-            qmkText += ' (transparent — falls through, available for tmux)';
+            qmkText += '\\n(transparent \\u2014 falls through)';
         } else if (qmkInfo.status === 'blocked') {
-            qmkText += ' (disabled — no output)';
+            qmkText += '\\n(disabled \\u2014 no output)';
         } else if (qmkInfo.status === 'layer') {
-            qmkText += ' (layer switch)';
+            qmkText += '\\n(layer switch)';
         }
         if (qmkInfo.mod) qmkText += '\\nHold: ' + qmkInfo.mod;
         qmkEl.textContent = qmkText;
@@ -956,9 +1033,7 @@ function showPopup(el, key, entry, qmkInfo) {
         qmkEl.style.display = 'none';
     }
 
-    // Position below the clicked key, clamped to viewport
     const rect = el.getBoundingClientRect();
-    popup.style.transform = '';
     popup.classList.add('visible');
     const popupRect = popup.getBoundingClientRect();
     let left = rect.left + window.scrollX + rect.width / 2 - popupRect.width / 2;
@@ -994,6 +1069,66 @@ renderKeys();
         f.write(html)
     return output_path
 
+
+# ---------------------------------------------------------------------------
+# Keyboard HTML builder
+# ---------------------------------------------------------------------------
+
+UNIT = 52   # pixels per key unit
+GAP = 4     # visual gap between adjacent keys (baked into width calc)
+
+
+def _compute_layout():
+    """Compute absolute (x, y, w) in pixels for every key in FULL_ROWS.
+
+    Uses the formula: a key at unit-position x with width w units occupies
+    pixels [x*UNIT, (x+w)*UNIT) with a GAP-pixel inset on each side.
+    This guarantees perfect alignment regardless of key grouping.
+    """
+    keys = []  # list of (label, tmux_name, x_px, y_px, w_px, h_px)
+    for row_idx, row in enumerate(FULL_ROWS):
+        x_units = 0.0
+        for item in row:
+            if item[0] == "gap":
+                x_units += item[1]
+            else:
+                _, label, tmux_name, width = item
+                x_px = int(x_units * UNIT)
+                y_px = int(row_idx * UNIT)
+                w_px = int(width * UNIT) - GAP
+                h_px = UNIT - GAP
+                keys.append((label, tmux_name, x_px, y_px, w_px, h_px))
+                x_units += width
+    return keys
+
+
+def _layout_bounds(keys):
+    """Return (total_width, total_height) in pixels for the layout."""
+    max_x = max(k[2] + k[4] + GAP for k in keys)
+    max_y = max(k[3] + k[5] + GAP for k in keys)
+    return max_x, max_y
+
+
+def _build_keyboard_html():
+    """Build the shared keyboard grid HTML using absolute positioning."""
+    keys = _compute_layout()
+    total_w, total_h = _layout_bounds(keys)
+
+    html = f'  <div class="keyboard" style="width:{total_w}px;height:{total_h}px">\n'
+    for label, tmux_name, x, y, w, h in keys:
+        label_escaped = escape(label)
+        html += (f'    <div class="key" data-key="{escape(tmux_name)}" '
+                 f'style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">'
+                 f'<span class="label">{label_escaped}</span>'
+                 f'<span class="cmd"></span>'
+                 f'<span class="qmk-label"></span></div>\n')
+    html += '  </div>\n'
+    return html
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 def main():
     import argparse
