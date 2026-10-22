@@ -3,9 +3,11 @@
 enum combos {
     DK_TG2_,
     L2_TG2_,
+    FJ_CAPS,
     WS_TAB_,
     DSLH_ENT_,
     PUNC_TAB_,
+    MCOM_GRV_,
     ZX_TERM_,
     CV_UNDS,
     UJ_LPRN,
@@ -32,11 +34,13 @@ const uint16_t PROGMEM kcom_combo[] = {DD_K, DD_COMM, COMBO_END};
 const uint16_t PROGMEM ujn_combo[]  = {KC_MINS, DD_7, COMBO_END};
 const uint16_t PROGMEM ikn_combo[]  = {KC_EQL, DD_8, COMBO_END};
 const uint16_t PROGMEM ol_combo[]   = {KC_O, DD_L, COMBO_END};
+const uint16_t PROGMEM fj_combo[]   = {DD_F, DD_J, COMBO_END};
 const uint16_t PROGMEM dk_combo[]   = {DD_D, DD_K, COMBO_END};
 const uint16_t PROGMEM L2_combo[]   = {DD_3, DD_8, COMBO_END};  // return from L2
 const uint16_t PROGMEM ws_combo[]   = {KC_W, DD_S, COMBO_END};
 const uint16_t PROGMEM punc_combo[] = {DD_COMM, DD_DOT, COMBO_END};
 const uint16_t PROGMEM dslh_combo[] = {DD_DOT, DD_SLSH, COMBO_END};
+const uint16_t PROGMEM mcom_combo[] = {DD_M,   DD_COMM, COMBO_END};
 const uint16_t PROGMEM zx_combo[]   = {DD_Z, DD_X, COMBO_END};
 const uint16_t PROGMEM cv_combo[]   = {DD_C, DD_V, COMBO_END};
 const uint16_t PROGMEM qwet_combo[] = {KC_Q, KC_W, KC_E, KC_T, COMBO_END};
@@ -57,11 +61,13 @@ combo_t key_combos[] = {
     [UJN_LBRC]  = COMBO(ujn_combo, KC_LBRC),
     [IKN_RBRC]  = COMBO(ikn_combo, KC_RBRC),
     [OL_MINS]   = COMBO(ol_combo, KC_MINS),
-    [DK_TG2_]   = COMBO(dk_combo, TG(_NUM)),
+    [FJ_CAPS]   = COMBO(fj_combo, CW_TOGG),
+    [DK_TG2_]   = COMBO(dk_combo, DD_LWRD_NUM),
     [L2_TG2_]   = COMBO(dk_combo, TG(_NUM)),
     [WS_TAB_]   = COMBO(ws_combo, KC_TAB),
     [DSLH_ENT_] = COMBO(dslh_combo, KC_ENT),
     [PUNC_TAB_] = COMBO(punc_combo, KC_TAB),
+    [MCOM_GRV_] = COMBO(mcom_combo, KC_GRV),
     [ZX_TERM_]  = COMBO(zx_combo, LCTL(KC_GRV)),
     [CV_UNDS]   = COMBO(cv_combo, KC_UNDS),
     [QWET_BOOT] = COMBO(qwet_combo, QK_BOOT),
@@ -84,5 +90,6 @@ const custom_shift_key_t custom_shift_keys[] = {
     {KC_COLN, KC_SCLN},          // Shift P+' combo -> ;
     {KC_LPRN, KC_LBRC},          // Shift ( -> [ (L0 combo)
     {KC_RPRN, KC_RBRC},          // Shift ) -> ] (L0 combo)
+    {DD2_SLSH, RSFT(KC_ENT)},    // Num layer, shift enter & /
 };
 #endif

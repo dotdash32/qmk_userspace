@@ -87,6 +87,8 @@
 #define DD_8  LT(_NUM, KC_8)
 #define DD_9  RCTL_T(KC_9)
 #define DD_0  RALT_T(KC_0)
+// override special for slash & shift-enter
+#define DD2_SLSH LSFT_T(KC_SLSH)
 
 #define DD_L2_TOP_L  KC_Q, KC_BSPC, KC_DEL, KC_ESC, DD_LWRD_NUM
 #define DD_L2_TOP_R  CW_TOGG, KC_MINS, KC_EQL, KC_COLN, KC_BSPC
@@ -95,7 +97,7 @@
 #define DD_L2_HRM_R  DD_6, DD_7, DD_8, DD_9, DD_0
 
 #define DD_L2_BOT_L  LSFT_T(KC_GRV), LCTL_T(DD_CODEBLK), LALT_T(KC_COPY), LGUI_T(KC_PSTE), CW_TOGG
-#define DD_L2_BOT_R  KC_BSLS, LGUI_T(KC_LBRC), LALT_T(KC_RBRC), DD_DOT, DD_SLSH
+#define DD_L2_BOT_R  KC_BSLS, LGUI_T(KC_LBRC), LALT_T(KC_RBRC), DD_DOT, DD2_SLSH
 
 #define DD_L2_THM_L  KC_TRNS, KC_TRNS, KC_TRNS
 #define DD_L2_THM_R  KC_TRNS, KC_TRNS, KC_TRNS
@@ -105,7 +107,7 @@
 // ============================================================
 
 #define DD_L3_TOP_L  CG_RSWP, CG_RNRM, QK_BOOT, DB_TOGG, KC_NO
-#define DD_L3_TOP_R  KC_NO, KC_NO, KC_NO, KC_VOLU, LNX_LCK,
+#define DD_L3_TOP_R  KC_NO, KC_NO, KC_NO, KC_VOLU, LNX_LCK
 
 #define DD_L3_HRM_L  KC_NO, KC_NO, KC_NO, KC_NO, KC_NO
 #define DD_L3_HRM_R  KC_NO, KC_NO, KC_MUTE, KC_VOLD, KC_NO
