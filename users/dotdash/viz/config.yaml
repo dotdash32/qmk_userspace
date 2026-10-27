@@ -6,7 +6,7 @@ draw_config:
   combo_h: 26.0
   key_rx: 6.0
   key_ry: 6.0
-  dark_mode: auto
+  dark_mode: false
   n_columns: 1
   separate_combo_diagrams: false
   combo_diagrams_scale: 2
@@ -29,7 +29,7 @@ draw_config:
     rx: 4
     ry: 4
   svg_extra_style: ''
-  footer_text: Created with <a href="https://github.com/caksoylar/keymap-drawer">keymap-drawer</a>
+  footer_text: ''
   shrink_wide_legends: 7
   style_layer_activators: true
   glyph_tap_size: 14
