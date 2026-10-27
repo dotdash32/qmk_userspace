@@ -122,10 +122,10 @@
 // Layer 4 - Numpad
 // ============================================================
 
-#define DD_L4_TOP_L  OS_LSFT, KC_BSPC, KC_E, KC_ESC, DD_LWRD_PAD
+#define DD_L4_TOP_L  LCTL(KC_LEFT), KC_BSPC, KC_E, KC_ESC, LCTL(KC_RGHT)
 #define DD_L4_TOP_R  KC_SLSH, KC_7, KC_8, KC_9, KC_BSPC
 
-#define DD_L4_HRM_L  RALT_T(KC_A), RCTL_T(KC_DOT), LT(_NUM,KC_D), LSFT_T(KC_F), LALT_T(KC_E)
+#define DD_L4_HRM_L  RALT_T(KC_A), RCTL_T(KC_DOT), LT(_NUM,KC_D), LSFT_T(KC_F), LALT_T(DD_LWRD_PAD)
 #define DD_L4_HRM_R  KC_DOT, KC_4, KC_5, KC_6, KC_0
 
 #define DD_L4_BOT_L  LSFT_T(DD_LWRD_PAD_SWAP), DD_X, DD_C, LGUI_T(KC_G), KC_B

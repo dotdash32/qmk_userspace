@@ -149,11 +149,11 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   Numpad:
-  - OS LSFT
+  - Lctl+Left
   - BSPC
   - E
   - ESC
-  - Lwrd Pad
+  - Lctl+Rght
   - /
   - '7'
   - '8'
@@ -163,7 +163,7 @@ layers:
   - {t: ., h: RCTL}
   - {t: D, h: Num}
   - {t: F, h: LSFT}
-  - {t: E, h: LALT}
+  - Lwrd Pad
   - .
   - '4'
   - '5'
@@ -273,12 +273,13 @@ combos:
   - { tk: ['-', '7'], k: '[', l: [Num] }
   - { tk: ['=', '8'], k: ']', l: [Num] }
   # layer toggle (D+K on Base, 3+8 on Num)
-  - { tk: [D, K], k: TG Num, l: [Base] }
+  - { tk: [D, K], k: Lwrd Num, l: [Base] }
   - { tk: ['3', '8'], k: TG Num, l: [Num] }
   # left-hand / punctuation
   - { tk: [W, {t: S, h: RCTL}], k: TAB, l: [Base] }
   - { tk: ['.', '/'], k: ENT, l: [Base] }
   - { tk: [',', '.'], k: TAB, l: [Base, Fn] }
+  - { tk: [M, ','], k: '`', l: [Base] }
   - { tk: [Z, X], k: "Ctl+`", l: [Base, Nav] }
   # 4-key boot / 3-key one-shot Sys (offset so they don't overlap)
   - { tk: [Q, W, E, T], k: BOOT, l: [Base], a: top, draw_separate: true}

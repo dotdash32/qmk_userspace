@@ -8,7 +8,6 @@ enum combos {
     DSLH_ENT_,
     PUNC_TAB_,
     MCOM_GRV_,
-    ZX_TERM_,
     CV_UNDS,
     UJ_LPRN,
     IK_RPRN,
@@ -41,7 +40,6 @@ const uint16_t PROGMEM ws_combo[]   = {KC_W, DD_S, COMBO_END};
 const uint16_t PROGMEM punc_combo[] = {DD_COMM, DD_DOT, COMBO_END};
 const uint16_t PROGMEM dslh_combo[] = {DD_DOT, DD_SLSH, COMBO_END};
 const uint16_t PROGMEM mcom_combo[] = {DD_M,   DD_COMM, COMBO_END};
-const uint16_t PROGMEM zx_combo[]   = {DD_Z, DD_X, COMBO_END};
 const uint16_t PROGMEM cv_combo[]   = {DD_C, DD_V, COMBO_END};
 const uint16_t PROGMEM qwet_combo[] = {KC_Q, KC_W, KC_E, KC_T, COMBO_END};
 const uint16_t PROGMEM yiop_combo[] = {KC_Y, KC_I, KC_O, KC_P, COMBO_END};
@@ -68,7 +66,6 @@ combo_t key_combos[] = {
     [DSLH_ENT_] = COMBO(dslh_combo, KC_ENT),
     [PUNC_TAB_] = COMBO(punc_combo, KC_TAB),
     [MCOM_GRV_] = COMBO(mcom_combo, KC_GRV),
-    [ZX_TERM_]  = COMBO(zx_combo, LCTL(KC_GRV)),
     [CV_UNDS]   = COMBO(cv_combo, KC_UNDS),
     [QWET_BOOT] = COMBO(qwet_combo, QK_BOOT),
     [YIOP_BOOT] = COMBO(yiop_combo, QK_BOOT),
